@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="TextTitle" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="android:letterSpacing">0</item>
+        <item name="android:lineHeight" tools:targetApi="p">28sp</item>
+        <item name="lineHeight">28sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#CFCFCF</item>
+    </style>
+
+    <style name="GenreTitle" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:letterSpacing">0</item>
+        <item name="android:lineHeight" tools:targetApi="p">24sp</item>
+        <item name="lineHeight">24sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#46647E</item>
+    </style>
+
+    <style name="Header" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:fontFamily">@font/butler_bold</item>
+        <item name="fontFamily">@font/butler_bold</item>
+        <item name="android:textColor">#B27AFF</item>
+    </style>
+
+    <style name="OutlinedButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">32dp</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+
+
+</resources>

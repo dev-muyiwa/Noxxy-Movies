@@ -1,0 +1,81 @@
+[versions]
+ktx = "1.9.0"
+androidGradlePlugin = "7.3.1"
+gradle-ktx = "1.8.10"
+
+appcompat = "1.6.1"
+google_material = "1.8.0"
+constraint_layout = "2.1.4"
+junit = "4.13.2"
+androidx_junit = "1.1.5"
+espresso = "3.5.1"
+nav_version = "2.5.3"
+hilt_version = "2.44"
+room_version = "2.5.1"
+retrofit_version = "2.9.0"
+okhttp_version = "4.10.0"
+moshi_version = "1.14.0"
+lifecycle_version = "2.6.1"
+timber_version = "5.0.1"
+coil_version = "2.3.0"
+paging_version = "3.1.1"
+
+
+
+[libraries]
+androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+google-material = { group = "com.google.android.material", name = "material", version.ref = "google_material" }
+constraint-layout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraint_layout" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx_junit" }
+androidx-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+
+# Navigation
+navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "nav_version" }
+navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "nav_version" }
+
+# Dependency Injection
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt_version" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt_version" }
+
+# Offline Storage
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room_version" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room_version" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }
+
+
+# Network
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit_version" }
+retrofit-moshi-converter = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit_version" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp_version" }
+okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp_version" }
+moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi_version" }
+moshi-kotlin-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi_version" }
+
+# Lifecycle Components
+viewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle_version" }
+lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common-java8", version.ref = "lifecycle_version" }
+
+# Logging
+timber-logging = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber_version" }
+
+# Image Loading
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil_version" }
+coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil_version" }
+
+
+
+[bundles]
+navigation-ktx = [ "navigation-fragment-ktx", "navigation-ui-ktx" ]
+network = [ "retrofit", "okhttp", "okhttp-logging", "moshi-kotlin", "retrofit-moshi-converter" ]
+lifecycle = [ "viewModel", "lifecycle-common" ]
+coil = [ "coil", "coil-gif" ]
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-lib = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+gradle-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "gradle-ktx" }
+navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "nav_version" }
+dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt_version" }

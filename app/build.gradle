@@ -1,0 +1,67 @@
+plugins {
+    alias projectLibs.plugins.android.application
+    alias projectLibs.plugins.gradle.kotlin
+    alias projectLibs.plugins.navigation.safeargs
+    alias projectLibs.plugins.dagger.hilt
+    id "kotlin-kapt"
+}
+
+android {
+    namespace 'dev.muyiwa.noxxy'
+    compileSdk rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "dev.muyiwa.noxxy"
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    hilt {
+        enableAggregatingTask = true
+    }
+    kapt {
+        correctErrorTypes true
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation project(":logging")
+    implementation project(":common")
+    implementation project(":features:home")
+    implementation project(":features:search")
+    implementation project(":features:bookmarks")
+    implementation project(":features:details")
+    implementation projectLibs.androidx.ktx
+    implementation projectLibs.appcompat
+    implementation projectLibs.google.material
+    implementation projectLibs.constraint.layout
+
+    implementation projectLibs.bundles.navigation.ktx
+    implementation projectLibs.hilt.android
+    kapt projectLibs.hilt.compiler
+
+
+    testImplementation projectLibs.junit
+    androidTestImplementation projectLibs.androidx.junit
+    androidTestImplementation projectLibs.androidx.espresso
+}

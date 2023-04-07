@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recycler_view_item_container"
+    android:layout_width="140dp"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="7dp"
+    android:layout_marginTop="@dimen/half_default_margin"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/poster_view"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        app:cardCornerRadius="4dp">
+
+        <ImageView
+            android:id="@+id/poster"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/categorised_movie_description" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/poster_view"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="14dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            tools:text="Pinocchio" />
+
+        <TextView
+            android:id="@+id/average_vote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:textColor="?attr/colorOnSecondary"
+            app:drawableStartCompat="@drawable/ic_baseline_star_24"
+            app:drawableTint="#FBE25B"
+            tools:text="6.4/10 IMDb" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

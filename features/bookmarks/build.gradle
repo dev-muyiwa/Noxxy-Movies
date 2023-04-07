@@ -1,0 +1,59 @@
+plugins {
+    alias projectLibs.plugins.android.lib
+    alias projectLibs.plugins.gradle.kotlin
+    alias projectLibs.plugins.navigation.safeargs
+    alias projectLibs.plugins.dagger.hilt
+    id "kotlin-kapt"
+}
+
+android {
+    namespace 'dev.muyiwa.bookmarks'
+    compileSdk rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.targetSdkVersion
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    hilt {
+        enableAggregatingTask = true
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    kapt {
+        correctErrorTypes true
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation projectLibs.androidx.ktx
+    implementation projectLibs.appcompat
+    implementation projectLibs.google.material
+    implementation projectLibs.constraint.layout
+
+    implementation projectLibs.bundles.navigation.ktx
+    implementation projectLibs.hilt.android
+    kapt projectLibs.hilt.compiler
+
+
+    testImplementation projectLibs.junit
+    androidTestImplementation projectLibs.androidx.junit
+    androidTestImplementation projectLibs.androidx.espresso
+}

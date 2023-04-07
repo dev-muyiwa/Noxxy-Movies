@@ -1,0 +1,19 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Noxxy" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#24272D</item>
+        <item name="colorPrimaryVariant">#24272D</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#0C0E12</item>
+        <item name="colorSecondaryVariant">#24272D</item>
+        <item name="colorOnSecondary">#656565</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorSecondaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="colorControlNormal">#B4B4B4</item>
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
+    </style>
+</resources>

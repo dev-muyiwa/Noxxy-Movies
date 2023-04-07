@@ -1,0 +1,18 @@
+plugins {
+    alias projectLibs.plugins.android.lib
+    alias projectLibs.plugins.gradle.kotlin
+    id "kotlin-kapt"
+}
+
+android {
+    namespace "dev.muyiwa.logging"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.targetSdkVersion
+    }
+}
+
+dependencies {
+    implementation projectLibs.timber.logging
+}

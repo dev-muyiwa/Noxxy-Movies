@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
+        android:backgroundTint="#1C2129"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="#B4B4B4"
+            app:titleCentered="true" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:background="#0C0E12"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/app_navigation"
+        tools:layout="@layout/fragment_home" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextColor="@color/white"
+        app:itemRippleColor="#535353"
+        android:layout_gravity="bottom"
+        app:labelVisibilityMode="selected"
+        app:backgroundTint="#1C2129"
+        app:menu="@menu/bottom_nav_menu" />
+
+</LinearLayout>

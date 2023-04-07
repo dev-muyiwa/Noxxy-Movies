@@ -1,0 +1,15 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext {
+        compileSdkVersion = 33
+        targetSdkVersion = compileSdkVersion
+        minSdkVersion = 23
+    }
+}
+plugins {
+    alias projectLibs.plugins.android.application apply false
+    alias projectLibs.plugins.android.lib apply false
+    alias projectLibs.plugins.gradle.kotlin apply false
+    alias projectLibs.plugins.navigation.safeargs apply false
+    alias projectLibs.plugins.dagger.hilt apply false
+}

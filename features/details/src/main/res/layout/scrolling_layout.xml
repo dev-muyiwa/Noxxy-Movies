@@ -1,0 +1,150 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginTop="28dp"
+    android:layout_marginBottom="16dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/poster_frame"
+            android:layout_width="150dp"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:id="@+id/movie_title"
+            style="@style/TextTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:maxLines="2"
+            android:layout_marginBottom="12dp"
+            android:layout_toEndOf="@id/poster_frame"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            tools:text="The Super Mario Bros. Movie" />
+
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_title"
+            android:layout_toEndOf="@id/poster_frame"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <RatingBar
+                    android:id="@+id/movie_rating"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="12dp"
+                    android:progressTint="@color/yellow" />
+
+                <TextView
+                    android:id="@+id/rating_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/movie_rating"
+                    android:layout_alignBottom="@id/movie_rating"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="6dp"
+                    android:layout_toEndOf="@id/movie_rating"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/gray"
+                    tools:text="7/10" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/runtime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="0.6"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:textColor="@color/gray"
+                app:drawableStartCompat="@drawable/ic_baseline_access_time_24"
+                app:drawableTint="#327A7C"
+                tools:text="94 min" />
+
+        </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/genre_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="12dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/movie_description_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/genre_rv"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="12dp"
+            app:cardBackgroundColor="#7A737373"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#C8737373"
+            app:strokeWidth="4dp">
+
+            <TextView
+                android:id="@+id/movie_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:textAlignment="center"
+                android:textColor="#CBCFCFCF"
+                android:textSize="20sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/release_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_description_container"
+            android:layout_alignParentStart="true"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:textColor="@color/gray"
+            app:drawableStartCompat="@drawable/ic_baseline_date_range_24"
+            app:drawableTint="#8C993B" />
+
+        <TextView
+            android:id="@+id/homepage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/release_date"
+            android:layout_alignParentStart="true"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:textColor="@color/gray"
+            android:textColorLink="@color/gray"
+            app:drawableStartCompat="@drawable/ic_baseline_web_24"
+            app:drawableTint="#8C993B" />
+
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>

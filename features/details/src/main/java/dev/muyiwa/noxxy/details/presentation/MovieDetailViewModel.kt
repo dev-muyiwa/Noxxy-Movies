@@ -3,7 +3,7 @@ package dev.muyiwa.noxxy.details.presentation
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.*
 import dev.muyiwa.common.data.api.utils.*
-import dev.muyiwa.common.domain.model.*
+import dev.muyiwa.common.domain.model.detail.*
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.presentation.*
 import dev.muyiwa.common.utils.*

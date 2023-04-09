@@ -33,42 +33,42 @@ class MoreMoviesFragment : Fragment(), ItemClickListener {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		var isGrid = viewModel.prefs.isGridLayout
+		val moreMoviesAdapter =
+			CompleteCategorisedMoviesAdapter(requireContext(), this@MoreMoviesFragment)
+		moreMoviesAdapter.setLayoutType(isGrid.toLayoutInt())
+		binding?.fullCategoryRv?.apply {
+			layoutManager = selectLayoutManager(isGrid)
+			hasFixedSize()
+			addOnScrollListener(createInfiniteScrollListener(layoutManager as LinearLayoutManager))
+			adapter = moreMoviesAdapter
+		}
 		val category = Category.valueOf(args.category)
-		val isGrid = true
 		val menuHost: MenuHost = requireActivity()
-		menuHost.addMenuProvider(object : MenuProvider{
+		menuHost.addMenuProvider(object : MenuProvider {
 			override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
 				menuInflater.inflate(R.menu.toolbar_more_movies, menu)
-			}
-
-			override fun onPrepareMenu(menu: Menu) {
-				super.onPrepareMenu(menu)
-				val layoutItem: MenuItem = menu.findItem(R.id.layout_type)
-//				if ()
+				menu.findItem(R.id.layout_type).setIcon(isGrid.getIcon())
 			}
 
 			override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-				return when(menuItem.itemId){
+				return when (menuItem.itemId) {
 					R.id.layout_type -> {
-						Toast.makeText(requireContext(), "Layout changed!", Toast
-							.LENGTH_SHORT).show()
+						isGrid = isGrid.not()
+						menuItem.setIcon(isGrid.getIcon())
+						binding?.fullCategoryRv?.layoutManager = selectLayoutManager(isGrid)
+						moreMoviesAdapter.setLayoutType(isGrid.toLayoutInt())
+						binding?.fullCategoryRv?.adapter = moreMoviesAdapter
+						viewModel.prefs.isGridLayout = isGrid
 						true
-					}else -> false
+					}
+					else -> false
 				}
 			}
 		}, viewLifecycleOwner, Lifecycle.State.RESUMED)
 		lifecycleScope.launch {
 			viewModel.category = category
 			viewModel.state.collect {
-				val moreMoviesAdapter =
-					CompleteCategorisedMoviesAdapter(requireContext(), this@MoreMoviesFragment)
-				moreMoviesAdapter.setLayoutType(1)
-				binding?.fullCategoryRv?.apply {
-					layoutManager = selectLayoutManager(isGrid)
-					hasFixedSize()
-					addOnScrollListener(createInfiniteScrollListener(layoutManager as LinearLayoutManager))
-					adapter = moreMoviesAdapter
-				}
 				moreMoviesAdapter.submitList(it.categorisedMovies)
 				handleFailure(it.failure)
 			}

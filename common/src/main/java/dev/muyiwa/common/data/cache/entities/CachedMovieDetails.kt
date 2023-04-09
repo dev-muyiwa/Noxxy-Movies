@@ -5,14 +5,13 @@ import com.squareup.moshi.*
 
 @Entity(tableName = CachedMovieDetails.tableName)
 data class CachedMovieDetails(
-//	@Embedded val movie: CachedCategorisedMovie,
 	val budget: Long,
 	val homepage: String,
 	@PrimaryKey val movieId: Int,
 	val revenue: Long,
 	val runtime: Int,
 	val status: String,
-	val tagline: String
+	val tagline: String,
 ){
 	companion object {
 		const val tableName = "movie_details"

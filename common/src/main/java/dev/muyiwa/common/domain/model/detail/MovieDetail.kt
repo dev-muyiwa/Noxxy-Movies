@@ -1,4 +1,4 @@
-package dev.muyiwa.common.domain.model
+package dev.muyiwa.common.domain.model.detail
 
 import dev.muyiwa.common.domain.model.category.*
 

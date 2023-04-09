@@ -51,7 +51,7 @@
             android:gravity="center"
             android:textColor="?attr/colorOnSecondary"
             app:drawableStartCompat="@drawable/ic_baseline_star_24"
-            app:drawableTint="#FBE25B"
+            app:drawableTint="@color/yellow"
             tools:text="6.4/10 IMDb" />
 
     </LinearLayout>

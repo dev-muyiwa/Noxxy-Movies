@@ -7,7 +7,7 @@ data class UiMovieDetails(
 	val budget: Long,
 	val homepage: String,
 	val revenue: Long,
-	val runtime: Int,
+	val runtime: String,
 	val status: String,
 	val tagline: String
 )

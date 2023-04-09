@@ -1,13 +1,14 @@
 package dev.muyiwa.noxxy.details.presentation
 
 import android.os.*
+import android.text.method.*
 import android.view.*
 import android.widget.*
 import androidx.core.view.*
 import androidx.fragment.app.*
 import androidx.lifecycle.*
 import androidx.navigation.fragment.*
-import com.google.android.material.snackbar.Snackbar
+import androidx.recyclerview.widget.*
 import dagger.hilt.android.*
 import dev.muyiwa.common.presentation.*
 import dev.muyiwa.common.utils.*
@@ -24,14 +25,11 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 		super.onViewCreated(view, savedInstanceState)
 		val binding = FragmentMovieDetailsBinding.bind(view)
 		var isBookmarked = false
-//		var scrollRange = -1
 		binding.appbarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-//			if (scrollRange == -1){
-//				scrollRange = appBarLayout.totalScrollRange
-//			}
 			binding.posterLayout.isVisible =
 				abs(verticalOffset) - appBarLayout.totalScrollRange != 0
-//			binding.posterLayout.isVisible = scrollRange + verticalOffset != 0
+			binding.body.posterFrame.isVisible =
+				abs(verticalOffset) - appBarLayout.totalScrollRange != 0
 		}
 		binding.toolbar.apply {
 			setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
@@ -68,14 +66,34 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 			}
 
 		}
+		val genreAdapter = GenreAdapter()
+		binding.body.genreRv.apply {
+			layoutManager =
+				LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+			adapter = genreAdapter
+		}
+		binding.body.homepage.movementMethod = LinkMovementMethod.getInstance()
 
 		lifecycleScope.launch {
-			viewModel.state.collect {
+			viewModel.state.collect { detail ->
 //				val isBookmarked = it.movieDetail?.movie?.basicCategorisedMovie?.isFavorite
-				binding.detailsText.text = "${it.movieDetail}"
-				binding.poster.loadImage(it.movieDetail?.movie?.basicCategorisedMovie?.posterPath.orEmpty())
-				binding.backdropImage.loadImage(it.movieDetail?.movie?.backdropPath.orEmpty())
-				handleFailure(it.failure)
+				detail.movieDetail?.let { movieDetail ->
+					binding.backdropImage.loadImage(movieDetail.movie.backdropPath)
+					binding.poster.loadImage(movieDetail.movie.basicCategorisedMovie.posterPath)
+					"${movieDetail.movie.basicCategorisedMovie.title} (${
+						movieDetail.movie.releaseDate.split("-")[0]
+					})".also { binding.body.movieTitle.text = it }
+					binding.body.movieRating.rating =
+						movieDetail.movie.basicCategorisedMovie.voteAverage.div(2).toFloat()
+					binding.body.ratingText.text =
+						"${movieDetail.movie.basicCategorisedMovie.voteAverage}"
+					binding.body.runtime.text = movieDetail.runtime
+					genreAdapter.submitList(movieDetail.movie.genreIds)
+					binding.body.movieDescription.text = movieDetail.movie.overview
+					binding.body.releaseDate.text = movieDetail.movie.releaseDate
+					binding.body.homepage.text = movieDetail.homepage
+				}
+				handleFailure(detail.failure)
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package dev.muyiwa.common.data.api
 
 import dev.muyiwa.common.data.api.model.*
+import dev.muyiwa.common.data.api.model.casts.*
 import dev.muyiwa.common.data.api.model.categorised_movie.*
 import dev.muyiwa.common.data.api.model.details.*
 import dev.muyiwa.common.data.api.utils.*
@@ -35,4 +36,10 @@ interface NoxxyApi {
 	suspend fun fetchMovieDetailsById(
 		@Path(MOVIE_ID) id: Long,
 	): ApiMovieDetails
+
+
+	@GET(CREDITS_ENDPOINT)
+	suspend fun fetchCastsByMovieId(
+		@Path(MOVIE_ID) id: Long,
+	): ApiCasts
 }

@@ -2,6 +2,7 @@ package dev.muyiwa.home.presentation.individual
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.*
+import dev.muyiwa.common.data.preferences.*
 import dev.muyiwa.common.domain.model.category.*
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.presentation.*
@@ -17,13 +18,15 @@ import javax.inject.*
 class CategorisedMoviesViewModel @Inject constructor(
 	private val getCategorisedMovieFlow: GetCategorisedMovieFlow,
 	private val getCategorisedMovies: GetCategorisedMovies,
-	private val requestMoreCategorisedMovies: RequestMoreCategorisedMovies
+	private val requestMoreCategorisedMovies: RequestMoreCategorisedMovies,
+	private val preferences: Preferences,
 ) : ViewModel() {
 	private val _state = MutableStateFlow(CategorisedMoviesState())
 	private var currentPage = 1
 	private var testPage = 1
 	val pageSize = Pagination.DEFAULT_PAGE_SIZE
 	var category = Category.POPULAR
+	val prefs = preferences
 	val state = _state.asStateFlow()
 	var isLoadingMoreMovies = false
 	var isLastPage = false
@@ -52,7 +55,7 @@ class CategorisedMoviesViewModel @Inject constructor(
 				.filter { it.isNotEmpty() }
 				.flowOn(Dispatchers.Default)
 				.catch { onFailed(it) }
-				.collect{ onNewMoviesList(it) }
+				.collect { onNewMoviesList(it) }
 
 			/**
 			getCategorisedMovies(category)

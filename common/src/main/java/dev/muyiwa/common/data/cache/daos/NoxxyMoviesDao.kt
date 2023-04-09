@@ -40,4 +40,7 @@ interface NoxxyMoviesDao {
 
 	@Query("DELETE FROM ${CachedMovieDetails.tableName} WHERE movieId = :id")
 	suspend fun deleteMovieDetail(id: Int)
+
+	@Query("SELECT * FROM ${CachedCast.tableName} WHERE movieId = :id")
+	suspend fun getCastsById(id: Int): List<CachedCast>
 }

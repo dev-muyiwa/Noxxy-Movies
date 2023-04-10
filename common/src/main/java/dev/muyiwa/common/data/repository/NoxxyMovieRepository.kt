@@ -3,6 +3,7 @@ package dev.muyiwa.common.data.repository
 import dev.muyiwa.common.data.api.*
 import dev.muyiwa.common.data.cache.daos.*
 import dev.muyiwa.common.data.preferences.*
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.model.category.*
 import dev.muyiwa.common.domain.model.detail.*
 import dev.muyiwa.common.domain.repositories.*
@@ -279,9 +280,21 @@ class NoxxyMovieRepository @Inject constructor(
 		category: Category,
 		movies: List<CategorisedMovie>
 	) {
-//		Delete the existing movies before adding the new list.
 		dao.insertCategorisedMovies(movies.map { it.toCacheModel() })
 	}
+
+//	override suspend fun getListOfGenres(): List<String> {
+//		return try {
+//			val apiGenres = retry { api.fetchGenres() }
+//			apiGenres.genres.orEmpty().map { it?.name.orEmpty()}
+//		} catch (e: Exception){
+//			Logger.e("${e.message}", e)
+//			if (e is HttpException) {
+//				throw NetworkException(e.message() ?: "Code ${e.code()}")
+//			}
+//			emptyList()
+//		}
+//	}
 
 	private suspend fun <T> retry(
 		times: Int = 5,

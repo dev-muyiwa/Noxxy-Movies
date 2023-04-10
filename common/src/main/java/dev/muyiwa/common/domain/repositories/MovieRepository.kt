@@ -1,5 +1,6 @@
 package dev.muyiwa.common.domain.repositories
 
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.model.category.*
 import dev.muyiwa.common.domain.model.detail.*
 import dev.muyiwa.common.domain.utils.*
@@ -14,5 +15,9 @@ interface MovieRepository {
 
 	fun getAllCategorisedMovies(lang: String, pageToLoad: Int = 1, noOfItems: Int = 10): Flow<Resource<List<List<CategorisedMovie>>>>
 	fun getMovieDetail(lang: String, movieId: Int): Flow<Resource<MovieDetail>>
+
+//	fun searchForMovies(lang: String, query: String): Flow<List<>>
+
+//	suspend fun getListOfGenres(): List<String>
 
 }

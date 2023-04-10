@@ -3,8 +3,10 @@ package dev.muyiwa.common.utils
 import dev.muyiwa.common.data.api.model.casts.*
 import dev.muyiwa.common.data.api.model.categorised_movie.*
 import dev.muyiwa.common.data.api.model.details.*
+import dev.muyiwa.common.data.api.model.genre.*
 import dev.muyiwa.common.data.api.utils.*
 import dev.muyiwa.common.data.cache.entities.*
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.model.category.*
 import dev.muyiwa.common.domain.model.detail.*
 import dev.muyiwa.common.domain.utils.*
@@ -166,4 +168,12 @@ fun MovieDetail.toUiModel(): UiMovieDetails {
 		status = status,
 		tagline = tagline
 	)
+}
+
+fun ApiGenre.toDomainModel(): Genre {
+	return Genre(id = id ?: 0, name = name.orEmpty())
+}
+
+fun Genre.toUiModel(): UiGenre {
+	return UiGenre(name = name)
 }

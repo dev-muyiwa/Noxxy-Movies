@@ -4,6 +4,8 @@ import dev.muyiwa.common.data.api.model.*
 import dev.muyiwa.common.data.api.model.casts.*
 import dev.muyiwa.common.data.api.model.categorised_movie.*
 import dev.muyiwa.common.data.api.model.details.*
+import dev.muyiwa.common.data.api.model.genre.*
+import dev.muyiwa.common.data.api.model.search.*
 import dev.muyiwa.common.data.api.utils.*
 import retrofit2.http.*
 
@@ -42,4 +44,16 @@ interface NoxxyApi {
 	suspend fun fetchCastsByMovieId(
 		@Path(MOVIE_ID) id: Long,
 	): ApiCasts
+
+	@GET(GENRE_ENDPOINT)
+	suspend fun fetchGenres(
+		@Query(LANG) language: String,
+	): ApiGenres
+
+	@GET(SEARCH_ENDPOINT)
+	suspend fun searchForMovies(
+		@Query(LANG) language: String,
+		@Query(QUERY) searchQuery: String,
+		@Query(PAGE) pageToLoad: Int,
+	): ApiSearchResponse
 }

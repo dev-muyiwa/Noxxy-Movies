@@ -75,6 +75,10 @@ fun String?.asUnknown(): String {
 	return this?.ifEmpty { "unknown" }.orEmpty()
 }
 
+fun Context.showToast(message: String, length: Int = Toast.LENGTH_SHORT){
+	Toast.makeText(this, message, length).show()
+}
+
 inline fun CoroutineScope.createExceptionHandler(
 	message: String,
 	crossinline action: (throwable: Throwable) -> Unit

@@ -1,17 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
+    tools:background="@color/cardview_dark_background"
     android:layout_height="match_parent"
-    tools:context=".SearchFragment">
+    tools:context=".presentation.SearchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/search_trigger"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="@android:color/white"
-        android:textSize="22sp"
-        android:gravity="center"
-        android:text="Search Feature" />
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="0dp"
+        app:contentPadding="16dp">
 
-</FrameLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="14dp"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:text="@string/search_hint"
+            android:textColor="#CD7E7E7E"
+            android:textSize="18sp"
+            app:drawableStartCompat="@drawable/ic_baseline_search_24"
+            app:drawableTint="?attr/colorPrimary"
+            tools:textColor="#535353" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_category_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/layout_search_item" />
+
+</LinearLayout>

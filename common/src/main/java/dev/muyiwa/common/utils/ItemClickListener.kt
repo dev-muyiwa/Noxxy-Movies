@@ -1,5 +1,6 @@
 package dev.muyiwa.common.utils
 
+import android.content.Context
 import android.view.*
 import androidx.navigation.Navigation.findNavController
 import dev.muyiwa.common.domain.utils.*
@@ -18,4 +19,8 @@ interface ItemClickListener {
 	fun addToBookmarks(movieId: Int){}
 
 	fun removeFromBookmarks(movieId: Int){}
+
+	fun navigateToSearchScreen(context: Context, category: String){
+		context.showToast("$category item fired!")
+	}
 }

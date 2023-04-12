@@ -4,6 +4,7 @@ import dev.muyiwa.common.data.api.model.casts.*
 import dev.muyiwa.common.data.api.model.categorised_movie.*
 import dev.muyiwa.common.data.api.model.details.*
 import dev.muyiwa.common.data.api.model.genre.*
+import dev.muyiwa.common.data.api.model.search.*
 import dev.muyiwa.common.data.api.utils.*
 import dev.muyiwa.common.data.cache.entities.*
 import dev.muyiwa.common.domain.model.*
@@ -23,8 +24,25 @@ fun ApiCategorisedMovieResponse.toDomainModel(category: Category): CategorisedPa
 	)
 }
 
-fun ApiCategorisedMovie.toDomainModel(category: Category): CategorisedMovie {
+fun ApiSearchResponse.toDomainModel(): PaginatedMovies {
+	return PaginatedMovies(
+		movies = results.orEmpty().map { it!!.toMovie() },
+		pagination = Pagination(
+			currentPage = currentPage ?: 0,
+			totalPages = totalPages ?: Pagination.UNKNOWN_TOTAL
+		)
+	)
+}
+
+fun ApiMovie.toDomainModel(category: Category): CategorisedMovie {
 	return CategorisedMovie(
+		movie = this.toMovie(),
+		category = category
+	)
+}
+
+fun ApiMovie.toMovie(): Movie {
+	return Movie(
 		isAdult = isAdult ?: false,
 		backdropPath = IMAGE_BASE_ENDPOINT + BACKDROP_SIZE + backdropPath.orEmpty(),
 		genreIds = genreIds.orEmpty().map { it?.toGenreName().orEmpty() },
@@ -39,12 +57,25 @@ fun ApiCategorisedMovie.toDomainModel(category: Category): CategorisedMovie {
 		video = video ?: false,
 		voteAverage = voteAverage ?: 0.0,
 		voteCount = voteCount ?: 0,
-		category = category
 	)
 }
 
 fun CachedCategorisedMovie.toDomainModel(): CategorisedMovie {
 	return CategorisedMovie(
+		movie = this.toMovie(),
+		category = category !!
+	)
+}
+
+fun Movie.toCategorisedMovie(): CategorisedMovie {
+	return CategorisedMovie(
+		movie = this,
+		category = null
+	)
+}
+
+fun CachedCategorisedMovie.toMovie(): Movie {
+	return Movie(
 		isAdult = isAdult,
 		backdropPath = backdropPath,
 		genreIds = genreIds,
@@ -59,7 +90,6 @@ fun CachedCategorisedMovie.toDomainModel(): CategorisedMovie {
 		video = video,
 		voteAverage = voteAverage,
 		voteCount = voteCount,
-		category = category
 	)
 }
 
@@ -102,27 +132,27 @@ fun CachedMovieDetails.toDomainModel(movie: CachedCategorisedMovie): MovieDetail
 // Cache Mapping
 fun CategorisedMovie.toCacheModel(): CachedCategorisedMovie {
 	return CachedCategorisedMovie(
-		isAdult = isAdult,
-		backdropPath = backdropPath,
-		genreIds = genreIds,
-		movieId = movieId,
-		originalLanguage = originalLanguage,
-		originalTitle = originalTitle,
-		overview = overview,
-		popularity = popularity,
-		posterPath = posterPath,
-		releaseDate = releaseDate,
-		title = title,
-		video = video,
-		voteAverage = voteAverage,
-		voteCount = voteCount,
+		isAdult = movie.isAdult,
+		backdropPath = movie.backdropPath,
+		genreIds = movie.genreIds,
+		movieId = movie.movieId,
+		originalLanguage = movie.originalLanguage,
+		originalTitle = movie.originalTitle,
+		overview = movie.overview,
+		popularity = movie.popularity,
+		posterPath = movie.posterPath,
+		releaseDate = movie.releaseDate,
+		title = movie.title,
+		video = movie.video,
+		voteAverage = movie.voteAverage,
+		voteCount = movie.voteCount,
 		category = category
 	)
 }
 
 fun MovieDetail.toCacheModel(): CachedMovieDetails {
 	return CachedMovieDetails(
-		movieId = movie.movieId,
+		movieId = movie.movie.movieId,
 		budget = budget,
 		homepage = homepage,
 		revenue = revenue,
@@ -136,10 +166,10 @@ fun MovieDetail.toCacheModel(): CachedMovieDetails {
 // UI Mapping
 fun CategorisedMovie.toUiModel(): UiCategorisedMovie {
 	return UiCategorisedMovie(
-		movieId = movieId,
-		posterPath = posterPath,
-		title = title,
-		voteAverage = voteAverage,
+		movieId = movie.movieId,
+		posterPath = movie.posterPath,
+		title = movie.title,
+		voteAverage = movie.voteAverage,
 		category = category
 	)
 }
@@ -147,14 +177,14 @@ fun CategorisedMovie.toUiModel(): UiCategorisedMovie {
 fun CategorisedMovie.toFullUiModel(): UiCategorisedMovieComplete {
 	return UiCategorisedMovieComplete(
 		basicCategorisedMovie = this.toUiModel(),
-		overview = overview,
-		genreIds = genreIds,
-		backdropPath = backdropPath,
-		originalLanguage = originalLanguage,
-		originalTitle = originalTitle,
-		popularity = popularity,
-		releaseDate = releaseDate,
-		voteCount = voteCount
+		overview = movie.overview,
+		genreIds = movie.genreIds,
+		backdropPath = movie.backdropPath,
+		originalLanguage = movie.originalLanguage,
+		originalTitle = movie.originalTitle,
+		popularity = movie.popularity,
+		releaseDate = movie.releaseDate,
+		voteCount = movie.voteCount
 	)
 }
 

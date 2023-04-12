@@ -19,12 +19,12 @@ class Converter {
 	}
 
 	@TypeConverter
-	fun fromCategory(category: Category): String {
-		return category.name
+	fun fromCategory(category: Category?): String? {
+		return category?.let{ it.name }
 	}
 
 	@TypeConverter
-	fun toCategory(name: String): Category {
-		return Category.valueOf(name)
+	fun toCategory(name: String?): Category? {
+		return name?.let{ Category.valueOf(it) }
 	}
 }

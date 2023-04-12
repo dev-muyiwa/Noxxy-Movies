@@ -1,9 +1,8 @@
 package dev.muyiwa.common.domain.model.category
 
-import dev.muyiwa.common.data.cache.entities.*
 import dev.muyiwa.common.domain.utils.*
 
-data class CategorisedMovie(
+data class Movie(
 	val isAdult: Boolean,
 	val backdropPath: String,
 	val genreIds: List<String>,
@@ -18,6 +17,10 @@ data class CategorisedMovie(
 	val video: Boolean,
 	val voteAverage: Double,
 	val voteCount: Int,
-	val category: Category
+)
+
+data class CategorisedMovie(
+	val movie: Movie,
+	val category: Category? = null
 )
 

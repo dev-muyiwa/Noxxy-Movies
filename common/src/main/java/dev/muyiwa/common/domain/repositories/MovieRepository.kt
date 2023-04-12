@@ -11,10 +11,13 @@ interface MovieRepository {
 
 	fun getCategorisedMovies(category: Category): Flow<List<CategorisedMovie>>
 	suspend fun requestForMoreCategorisedMovies(pageToLoad: Int, category: Category): CategorisedPaginatedMovies
-	suspend fun storeCategorisedMovies(category: Category, movies: List<CategorisedMovie>)
+	suspend fun storeCategorisedMovies(movies: List<CategorisedMovie>)
 
 	fun getAllCategorisedMovies(lang: String, pageToLoad: Int = 1, noOfItems: Int = 10): Flow<Resource<List<List<CategorisedMovie>>>>
 	fun getMovieDetail(lang: String, movieId: Int): Flow<Resource<MovieDetail>>
+
+	fun searchCachedMoviesBy(query: String): Flow<List<Movie>>
+	suspend fun searchMoviesRemotely(query: String, pageToLoad: Int): PaginatedMovies
 
 //	fun searchForMovies(lang: String, query: String): Flow<List<>>
 

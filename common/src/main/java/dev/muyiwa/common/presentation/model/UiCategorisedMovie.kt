@@ -7,5 +7,5 @@ data class UiCategorisedMovie(
 	val posterPath: String,
 	val title: String,
 	val voteAverage: Double,
-	val category: Category
+	val category: Category?
 )

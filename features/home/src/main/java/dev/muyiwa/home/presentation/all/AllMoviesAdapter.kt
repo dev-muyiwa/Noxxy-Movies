@@ -26,10 +26,9 @@ class AllMoviesAdapter(private val context: Context, private val listener: ItemC
 				return
 			}
 			val sample = movies[0]
-			binding.heading.text = sample.category.title
+			binding.heading.text = sample.category?.let{ it.title }
 			binding.btnSeeMore.setOnClickListener {
-				listener.navigateToMoreMovies(sample.category)
-//				handleNavigation(it, sample.category)
+				sample.category?.let { listener.navigateToMoreMovies(it)}
 			}
 //			val snapHelper = LinearSnapHelper()
 			val categorisedMovieAdapter = CategorisedMoviesAdapter(listener)
@@ -42,13 +41,6 @@ class AllMoviesAdapter(private val context: Context, private val listener: ItemC
 			categorisedMovieAdapter.submitList(movies)
 		}
 
-		private fun handleNavigation(button: View, category: Category) {
-			Logger.i("Navigating to ${category.title} screen.")
-			val action = HomeFragmentDirections
-					.actionHomeFragmentToMoreMoviesFragment(category.name, category.title)
-			button.findNavController().navigate(action)
-
-		}
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllMoviesViewHolder {

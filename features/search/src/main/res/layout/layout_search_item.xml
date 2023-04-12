@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_background"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:layout_margin="4dp"
-    app:cardBackgroundColor="@android:color/holo_orange_dark"
-    app:cardCornerRadius="6dp"
-    app:contentPadding="12dp">
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp">
 
     <TextView
-        android:id="@+id/search_category"
-        style="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+        android:id="@+id/recent_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@android:color/white"
-        tools:text="Action" />
+        android:textSize="14sp"
+        android:drawablePadding="12dp"
+        android:gravity="center_vertical"
+        android:textStyle="normal"
+        android:includeFontPadding="false"
+        android:textColor="#A7A7A7"
+        app:drawableStartCompat="@drawable/ic_baseline_access_time_24"
+        app:drawableTint="@color/gray"
+        tools:text="Pinnochio" />
 
-</androidx.cardview.widget.CardView>
+</FrameLayout>

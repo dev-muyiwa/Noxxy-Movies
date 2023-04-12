@@ -11,15 +11,15 @@ class SearchCategoryAdapter(private val context: Context, private val listener: 
 	inner class StringViewHolder(
 		private val binding: LayoutSearchItemBinding
 	) : RecyclerView.ViewHolder(binding.root) {
-		fun bind(category: String) {
-			binding.searchCategory.text = category
+		fun bind(recent: String) {
+			binding.recentSearch.text = recent
 		}
 
-		fun handleClickEvents(category: String) {
+		fun handleClickEvents(recentSearch: String) {
 			binding.itemBackground.setOnClickListener {
 				listener.navigateToSearchScreen(
 					context,
-					category
+					recentSearch
 				)
 			}
 		}

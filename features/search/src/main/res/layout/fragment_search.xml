@@ -6,38 +6,51 @@
     android:orientation="vertical"
     tools:background="@color/cardview_dark_background"
     android:layout_height="match_parent"
+    android:layout_margin="12dp"
     tools:context=".presentation.SearchFragment">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/search_trigger"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_bar"
+        style="@style/Widget.AppCompat.SearchView.ActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center_vertical"
+        android:layout_marginVertical="12dp"
+        android:background="@drawable/search_bar_bg"
+        app:defaultQueryHint="Search for movies..."
+        app:iconifiedByDefault="false"
+        app:searchIcon="@drawable/ic_baseline_search_24" />
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="0dp"
-        app:contentPadding="16dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawablePadding="14dp"
-            android:gravity="center_vertical"
-            android:includeFontPadding="false"
-            android:text="@string/search_hint"
-            android:textColor="#CD7E7E7E"
-            android:textSize="18sp"
-            app:drawableStartCompat="@drawable/ic_baseline_search_24"
-            app:drawableTint="?attr/colorPrimary"
-            tools:textColor="#535353" />
-
-    </androidx.cardview.widget.CardView>
+        android:textColor="#BEBEBE"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="Recent Search"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/search_category_rv"
+        android:id="@+id/recent_search_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:scrollbars="vertical"
         tools:listitem="@layout/layout_search_item" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_results_rv"
+        android:layout_marginTop="8dp"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/layout_categorised_item_complete"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:textColor="@color/gray"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_result"
+        android:scrollbars="vertical"/>
 
 </LinearLayout>

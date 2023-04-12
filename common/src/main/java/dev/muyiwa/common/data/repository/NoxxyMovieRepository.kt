@@ -3,7 +3,6 @@ package dev.muyiwa.common.data.repository
 import dev.muyiwa.common.data.api.*
 import dev.muyiwa.common.data.cache.daos.*
 import dev.muyiwa.common.data.preferences.*
-import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.model.category.*
 import dev.muyiwa.common.domain.model.detail.*
 import dev.muyiwa.common.domain.repositories.*
@@ -277,24 +276,33 @@ class NoxxyMovieRepository @Inject constructor(
 	}
 
 	override suspend fun storeCategorisedMovies(
-		category: Category,
 		movies: List<CategorisedMovie>
 	) {
 		dao.insertCategorisedMovies(movies.map { it.toCacheModel() })
 	}
 
-//	override suspend fun getListOfGenres(): List<String> {
-//		return try {
-//			val apiGenres = retry { api.fetchGenres() }
-//			apiGenres.genres.orEmpty().map { it?.name.orEmpty()}
-//		} catch (e: Exception){
-//			Logger.e("${e.message}", e)
-//			if (e is HttpException) {
-//				throw NetworkException(e.message() ?: "Code ${e.code()}")
-//			}
-//			emptyList()
-//		}
-//	}
+	override fun searchCachedMoviesBy(query: String): Flow<List<Movie>> {
+		return dao.searchMoviesByTitle(query)
+			.distinctUntilChanged()
+			.map { moviesList -> moviesList.map { it.toMovie() } }
+	}
+
+	override suspend fun searchMoviesRemotely(
+		query: String,
+		pageToLoad: Int
+	): PaginatedMovies {
+		val lang = preferences.languageTag
+		try {
+			val apiSearchResponse = retry(2) {
+				api.searchForMovies(lang, query, pageToLoad)
+			}
+			return apiSearchResponse.toDomainModel()
+		} catch (exception: HttpException) {
+			throw NetworkException(
+				exception.message() ?: "Code ${exception.code()}"
+			)
+		}
+	}
 
 	private suspend fun <T> retry(
 		times: Int = 5,

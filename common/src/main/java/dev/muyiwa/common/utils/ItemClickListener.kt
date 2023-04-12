@@ -20,7 +20,9 @@ interface ItemClickListener {
 
 	fun removeFromBookmarks(movieId: Int){}
 
-	fun navigateToSearchScreen(context: Context, category: String){
-		context.showToast("$category item fired!")
+	fun navigateToSearchScreen(context: Context, category: String? = null){
+		Logger.i("Navigating to Search screen.")
+//		val action = Se
+//		findNavController(view).navigateToDetailsScreen(id)
 	}
 }

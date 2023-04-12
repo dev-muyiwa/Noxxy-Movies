@@ -15,5 +15,7 @@
         <item name="colorControlNormal">#B4B4B4</item>
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:splitMotionEvents">false</item>
+
+        <item name="colorOnSurfaceVariant">#24272D</item>
     </style>
 </resources>

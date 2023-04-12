@@ -13,6 +13,14 @@ interface NoxxyMoviesDao {
 	@Query("SELECT *  FROM ${CachedCategorisedMovie.tableName} WHERE category = :category")
 	fun getAllMoviesByCategory(category: Category): Flow<List<CachedCategorisedMovie>>
 
+//	@Query("SELECT * FROM movies WHERE title LIKE '%' || :searchQuery || '%'")
+//	fun searchMovies(searchQuery: String): List<Movie>
+
+
+	@Query("SELECT *  FROM ${CachedCategorisedMovie.tableName} " +
+			"WHERE title LIKE '%' || :query || '%'")
+	fun searchMoviesByTitle(query: String): Flow<List<CachedCategorisedMovie>>
+
 	suspend fun insertCategorisedMovies(movies: List<CachedCategorisedMovie>){
 		movies.forEach { movie -> insertCategorisedMovie(movie) }
 	}

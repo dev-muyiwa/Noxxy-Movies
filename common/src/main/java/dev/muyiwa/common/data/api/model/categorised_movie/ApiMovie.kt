@@ -3,12 +3,9 @@ package dev.muyiwa.common.data.api.model.categorised_movie
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import dev.muyiwa.common.data.api.utils.*
-import dev.muyiwa.common.domain.model.*
-import dev.muyiwa.common.domain.utils.*
 
 @JsonClass(generateAdapter = true)
-data class ApiCategorisedMovie(
+data class ApiMovie(
     @field:Json(name = "adult") val isAdult: Boolean? ,
     @field:Json(name = "backdrop_path") val backdropPath: String? ,
     @field:Json(name = "genre_ids") val genreIds: List<Int?>? ,

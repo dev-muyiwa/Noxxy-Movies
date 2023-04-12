@@ -15,7 +15,7 @@ class CompleteCategorisedMoviesAdapter(
 	ListAdapter<UiCategorisedMovieComplete, RecyclerView.ViewHolder>(
 		ITEM_COMPARATOR
 	) {
-	private var item_view by Delegates.notNull<Int>()
+	private var item_view  = 0
 	private val item_list = 0
 	private val item_grid = 1
 //	private val loading = 2
@@ -106,14 +106,6 @@ class CompleteCategorisedMoviesAdapter(
 			holder.bind(movie)
 		}
 	}
-
-//	override fun getItemViewType(position: Int): Int {
-//		return when (getItem(position)) {
-//			null -> loading
-//			else -> item_list
-//		}
-//	}
-
 }
 
 private val ITEM_COMPARATOR = object : DiffUtil.ItemCallback<UiCategorisedMovieComplete>() {

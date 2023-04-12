@@ -21,7 +21,7 @@ data class CachedCategorisedMovie(
 	val video: Boolean,
 	val voteAverage: Double,
 	val voteCount: Int,
-	val category: Category
+	val category: Category? = null
 ) {
 	companion object {
 		const val tableName = "categorised_movie"

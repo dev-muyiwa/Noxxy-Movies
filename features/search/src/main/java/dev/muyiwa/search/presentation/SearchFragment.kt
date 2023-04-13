@@ -2,9 +2,9 @@ package dev.muyiwa.search.presentation
 
 import android.content.*
 import android.os.*
-import android.text.method.*
 import android.view.*
 import androidx.appcompat.widget.*
+import androidx.core.view.*
 import androidx.fragment.app.*
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
@@ -37,22 +37,33 @@ class SearchFragment : Fragment(R.layout.fragment_search), ItemClickListener {
 		binding.searchResultsRv.apply {
 			layoutManager =
 				LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+			addOnScrollListener(createInfiniteScrollListener(layoutManager as LinearLayoutManager))
 			adapter = resultsAdapter
 			hasFixedSize()
 		}
-//		searchCategoryAdapter.submitList(searches)
+		searchCategoryAdapter.submitList(searches)
 		lifecycleScope.launch {
 			viewModel.state.collect {
 				resultsAdapter.submitList(it.searchResults)
+				// display the recent search when the query is empty and the loading when the search result is empty
+				binding.recentSearchRv.isVisible = it.searchResults.isEmpty()
 				handleFailures(it.failure)
 			}
 		}
-
-
 	}
 
-	private fun setupSearchViewListener(binding: FragmentSearchBinding){
-//		binding.searchBar.
+	private fun createInfiniteScrollListener(layoutManager: LinearLayoutManager):
+			RecyclerView.OnScrollListener {
+		return object : InfiniteScrollListener(layoutManager, viewModel.pageSize) {
+			override fun isLoading(): Boolean = viewModel.isLoadingMoreMovies
+
+			override fun isLastPage(): Boolean = viewModel.isLastPage
+
+			override fun loadMoreMovies() = viewModel.onEvent(SearchEvent.RequestForSearchResult)
+		}
+	}
+
+	private fun setupSearchViewListener(binding: FragmentSearchBinding) {
 		binding.searchBar.setOnQueryTextListener(
 			object : SearchView.OnQueryTextListener {
 				override fun onQueryTextSubmit(query: String?): Boolean {

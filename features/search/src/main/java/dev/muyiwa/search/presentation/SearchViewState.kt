@@ -29,14 +29,13 @@ data class SearchViewState(
 	fun updateToSearchingRemotely(): SearchViewState {
 		return copy(
 			searchingRemotely = true,
-			searchResults = emptyList()
 		)
 	}
 
-	fun updateToHasSearchResults(animals: List<UiCategorisedMovieComplete>): SearchViewState {
+	fun updateToHasSearchResults(movies: List<UiCategorisedMovieComplete>): SearchViewState {
 		return copy(
 			noSearchQuery = false,
-			searchResults = animals,
+			searchResults = (searchResults + movies).toSet().toList(),
 			searchingRemotely = false,
 			noRemoteResults = false
 		)

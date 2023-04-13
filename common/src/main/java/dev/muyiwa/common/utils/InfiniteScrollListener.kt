@@ -1,4 +1,4 @@
-package dev.muyiwa.home.presentation.individual
+package dev.muyiwa.common.utils
 
 import androidx.recyclerview.widget.*
 

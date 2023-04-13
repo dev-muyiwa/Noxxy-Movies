@@ -63,7 +63,7 @@ fun ApiMovie.toMovie(): Movie {
 fun CachedCategorisedMovie.toDomainModel(): CategorisedMovie {
 	return CategorisedMovie(
 		movie = this.toMovie(),
-		category = category !!
+		category = category
 	)
 }
 

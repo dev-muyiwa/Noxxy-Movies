@@ -20,15 +20,14 @@ class SearchViewModel @Inject constructor(
 
 	private var remoteSearchJob: Job = Job()
 	private var currentPage = 0
+	val pageSize = Pagination.DEFAULT_PAGE_SIZE
+	var isLoadingMoreMovies = false
+	var isLastPage = false
 
 	private val _state = MutableStateFlow(SearchViewState())
 	private val queryStateFlow = MutableStateFlow("")
 
 	val state: StateFlow<SearchViewState> = _state.asStateFlow()
-
-//	init {
-//		setupSearchSubscription()
-//	}
 
 	fun onEvent(event: SearchEvent) {
 		when (event) {
@@ -70,6 +69,7 @@ class SearchViewModel @Inject constructor(
 		)
 		when (event) {
 			is SearchEvent.QueryInput -> updateQuery(event.input)
+			is SearchEvent.RequestForSearchResult -> onEmptyCacheResults(queryStateFlow.value)
 			else -> Logger.d("Wrong SearchEvent in onSearchParametersUpdate!")
 		}
 	}
@@ -77,6 +77,7 @@ class SearchViewModel @Inject constructor(
 	private fun updateQuery(input: String) {
 		resetPagination()
 		queryStateFlow.value = input
+		Logger.i("Search query updated.")
 
 		if (input.isEmpty()) {
 			setNoSearchQueryState()
@@ -85,44 +86,28 @@ class SearchViewModel @Inject constructor(
 		}
 	}
 
-
 	private fun createExceptionHandler(message: String): CoroutineExceptionHandler {
 		return viewModelScope.createExceptionHandler(message) {
 			onFailure(it)
 		}
 	}
 
-//	private fun setupSearchSubscription() {
-//		val message = "Unable to search."
-//		viewModelScope.launch(createExceptionHandler(message)) {
-//			searchMovies(queryStateFlow)
-//				.map { movies ->
-//					movies.map { it.toCategorisedMovie().toFullUiModel() }
-//				}
-//				.onStart { setSearchingState() }
-//				.onEmpty { setNoSearchQueryState() }
-//				.catch { onFailure(it) }
-//				.collect { onAnimalList(it) }
-//		}
-//	}
-
-//	private fun updateQuery(input: String) {
-//		resetPagination()
-//		queryStateFlow.value = input
-//	}
-
 	private fun searchRemotely(query: String) {
 		val exceptionHandler = createExceptionHandler(message = "Failed to search remotely.")
+		isLoadingMoreMovies = true
 		remoteSearchJob = viewModelScope.launch(exceptionHandler) {
 			Logger.d("Searching remotely...")
 			val pagination = searchMoviesRemotely(++ currentPage, query)
 			onPaginationInfoObtained(pagination)
+			isLoadingMoreMovies = false
 		}
 		remoteSearchJob.invokeOnCompletion { it?.printStackTrace() }
 	}
 
 	private fun onPaginationInfoObtained(pagination: Pagination) {
+		Logger.i("Pagination info obtained.")
 		currentPage = pagination.currentPage
+		isLastPage = pagination.canLoadMore.not()
 	}
 
 	private fun setSearchingState() {
@@ -154,127 +139,4 @@ class SearchViewModel @Inject constructor(
 			}
 		}
 	}
-
-
-//	-----------------------------------------------------------------------------------
-//	private var remoteSearchJob: Job = Job()
-//	private val _state = MutableStateFlow(SearchViewState())
-//	private var currentPage = 0
-//	private val querySubject = MutableStateFlow("")
-
-
-//	fun onEvent(event: SearchEvent) {
-//		when (event) {
-//			is SearchEvent.PrepareForSearch -> subscribeToSearch()
-//			else -> onSearchParametersUpdate(event)
-//		}
-//	}
-//
-//	private fun createExceptionHandler(message: String): CoroutineExceptionHandler {
-//		return viewModelScope.createExceptionHandler(message) {
-//			onFailure(it)
-//		}
-//	}
-//
-//	private fun subscribeToSearch() {
-//		searchMovies(querySubject)
-//			.onEach { onSearchResults(querySubject.value, it) }
-//			.flowOn(Dispatchers.IO)
-//			.catch { onFailure(it) }
-//			.launchIn(viewModelScope)
-//	}
-//
-//	private fun onSearchParametersUpdate(event: SearchEvent) {
-//		remoteSearchJob.cancel(
-//			CancellationException("New search parameters incoming!")
-//		)
-//
-//		when (event) {
-//			is SearchEvent.QueryInput -> updateQuery(event.input)
-//			else -> Logger.d("Wrong SearchEvent in onSearchParametersUpdate!")
-//		}
-//	}
-//
-//	private fun onSearchResults(query: String, movies: List<Movie>) {
-//		if (movies.isEmpty()) {
-//			onEmptyCacheResults(query)
-//		} else {
-//			onMovieList(movies)
-//		}
-//	}
-//
-//	private fun onMovieList(movies: List<Movie>) {
-////		_state.update { oldState ->
-//////			oldState.updateToHasSearchResults(movies.map { uiAnimalMapper.mapToView(it) })
-////		}
-//	}
-//
-//	private fun onEmptyCacheResults(query: String) {
-//		_state.update { oldState ->
-//			oldState.updateToSearchingRemotely()
-//		}
-//		searchRemotely(query)
-//	}
-//
-//	private fun searchRemotely(searchQuery: String) {
-//		val exceptionHandler = createExceptionHandler(message = "Failed to search remotely.")
-//		remoteSearchJob = viewModelScope.launch(exceptionHandler) {
-//			Logger.d("Searching remotely...")
-//			val pagination = searchMoviesRemotely(++ currentPage, searchQuery)
-//			onPaginationInfoObtained(pagination)
-//		}
-//		remoteSearchJob.invokeOnCompletion { it?.printStackTrace() }
-//	}
-//
-//	private fun updateQuery(input: String) {
-//		resetPagination()
-//		querySubject.onEach { }
-//
-//		if (input.isEmpty()) {
-//			setNoSearchQueryState()
-//		} else {
-//			setSearchingState()
-//		}
-//	}
-//
-//	private fun onNext(input: String) {
-//		querySubject.value = input
-//	}
-//
-//	fun subscribe(onNext: (String) -> Unit): Job {
-//		val job = Job()
-//		querySubject.onEach { onNext(it) }.distinctUntilChanged().launchIn(remoteSearchJob)
-//		onNext(querySubject.value) // Emit the current value immediately
-//		return job
-//	}
-//
-//	fun unsubscribe(job: Job) {
-//		job.cancel()
-//	}
-//
-//	private fun setSearchingState() {
-//		_state.update { oldState -> oldState.updateToSearching() }
-//	}
-//
-//	private fun setNoSearchQueryState() {
-//		_state.update { oldState -> oldState.updateToNoSearchQuery() }
-//	}
-//
-//	private fun resetPagination() {
-//		currentPage = 0
-//	}
-//
-//	private fun onPaginationInfoObtained(pagination: Pagination) {
-//		currentPage = pagination.currentPage
-//	}
-//
-//	private fun onFailure(throwable: Throwable) {
-//		_state.update { oldState ->
-//			if (throwable is NoMoreMoviesException) {
-//				oldState.updateToNoResultsAvailable()
-//			} else {
-//				oldState.updateToHasFailure(throwable)
-//			}
-//		}
-//	}
 }

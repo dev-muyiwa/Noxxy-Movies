@@ -25,7 +25,6 @@ class SearchFragment : Fragment(R.layout.fragment_search), ItemClickListener {
 		val binding = FragmentSearchBinding.bind(view)
 		setupSearchViewListener(binding)
 		viewModel.onEvent(SearchEvent.PrepareForSearch)
-//		binding.searchResult.movementMethod = ScrollingMovementMethod.getInstance()
 		val searches = listOf("Antman", "Akeelah and the bee", "Pinnochio", "John wick")
 		val searchCategoryAdapter = SearchCategoryAdapter(requireContext(), this)
 		val resultsAdapter = CompleteCategorisedMoviesAdapter(requireContext(), this)
@@ -41,10 +40,9 @@ class SearchFragment : Fragment(R.layout.fragment_search), ItemClickListener {
 			adapter = resultsAdapter
 			hasFixedSize()
 		}
-		searchCategoryAdapter.submitList(searches)
+//		searchCategoryAdapter.submitList(searches)
 		lifecycleScope.launch {
 			viewModel.state.collect {
-//				binding.searchResult.text = "$it"
 				resultsAdapter.submitList(it.searchResults)
 				handleFailures(it.failure)
 			}

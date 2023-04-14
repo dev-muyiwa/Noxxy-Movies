@@ -45,8 +45,10 @@ class SearchFragment : Fragment(R.layout.fragment_search), ItemClickListener {
 		lifecycleScope.launch {
 			viewModel.state.collect {
 				resultsAdapter.submitList(it.searchResults)
-				// display the recent search when the query is empty and the loading when the search result is empty
-				binding.recentSearchRv.isVisible = it.searchResults.isEmpty()
+				binding.recentSearchRv.isVisible = it.noSearchQuery
+				binding.loadingSearch.isVisible =
+					it.searchResults.isEmpty() && it.noSearchQuery.not()
+//							&& it.noRemoteResults
 				handleFailures(it.failure)
 			}
 		}
@@ -95,7 +97,4 @@ class SearchFragment : Fragment(R.layout.fragment_search), ItemClickListener {
 		}
 	}
 
-	override fun navigateToSearchScreen(context: Context, category: String?) {
-		super.navigateToSearchScreen(context, category)
-	}
 }

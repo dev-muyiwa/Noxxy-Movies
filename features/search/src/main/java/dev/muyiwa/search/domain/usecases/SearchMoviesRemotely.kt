@@ -4,6 +4,7 @@ import dev.muyiwa.common.domain.model.category.*
 import dev.muyiwa.common.domain.repositories.*
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.utils.*
+import dev.muyiwa.logging.*
 import kotlinx.coroutines.*
 import javax.inject.*
 
@@ -13,7 +14,9 @@ class SearchMoviesRemotely @Inject constructor(
 ) {
 	suspend operator fun invoke(pageToLoad: Int, query: String): Pagination {
 		return withContext(dispatchersProvider.io()) {
-			val (movies, pagination) = repository.searchMoviesRemotely(query, pageToLoad)
+			val (movies, pagination) = repository
+				.searchMoviesRemotely(query, pageToLoad)
+			Logger.i("Search Query is $query\n movies = $movies")
 			if (movies.isEmpty()) {
 				throw NoMoreMoviesException("Unable to get movies like $query")
 			}

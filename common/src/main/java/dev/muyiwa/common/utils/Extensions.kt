@@ -8,24 +8,18 @@ import androidx.navigation.*
 import coil.*
 import coil.decode.*
 import dev.muyiwa.common.R
-import dev.muyiwa.common.data.api.model.categorised_movie.*
-import dev.muyiwa.common.data.api.model.details.*
-import dev.muyiwa.common.data.api.utils.*
-import dev.muyiwa.common.data.cache.entities.*
-import dev.muyiwa.common.domain.model.category.*
-import dev.muyiwa.common.domain.model.detail.*
-import dev.muyiwa.common.domain.utils.*
-import dev.muyiwa.common.presentation.model.*
 import dev.muyiwa.logging.*
 import kotlinx.coroutines.*
 import java.net.*
-import java.text.SimpleDateFormat
+import java.text.*
 import java.util.*
 
+/** This extension function returns true if the device is a tablet otherwise false. */
 fun Context.isTablet(): Boolean = resources.getBoolean(R.bool.is_tablet)
 
 fun Boolean.gridSize(): Int = if (this) 3 else 2
 
+/** This extension function shortens the loading of images into an ImageView. */
 fun ImageView.loadImage(url: String) {
 	val imageLoader = ImageLoader.Builder(context)
 		.components {
@@ -46,6 +40,7 @@ fun ImageView.loadImage(url: String) {
 //	imageLoader.shutdown()
 }
 
+/** This extension function creates a DeepLinkRequest that is used to navigate between feature modules. */
 fun NavController.navigateToDetailsScreen(id: Int) {
 	val encodedId = URLEncoder.encode("$id", "utf-8")
 	val request = NavDeepLinkRequest.Builder
@@ -63,10 +58,17 @@ fun String.toDate(): String {
 	return "$day " + monthFormat.format(calendar.time) + ", $year"
 }
 
+/** This function converts the whitespaces in a search query to %20 to make it usable by the API. */
+//fun String.toSearchQuery(): String {
+//	return this.split(" ")
+//		.joinToString("%20")
+//}
+
 fun Boolean.toLayoutInt(): Int {
 	return if (this) 1 else 0
 }
 
+/** This function returns the icon for a grid view if true else the icon for a list view. */
 fun Boolean.getIcon(): Int {
 	return if (this) R.drawable.ic_round_grid_view_24 else R.drawable.ic_round_view_list_24
 }
@@ -75,6 +77,7 @@ fun String?.asUnknown(): String {
 	return this?.ifEmpty { "unknown" }.orEmpty()
 }
 
+/** This extension function displays a Toast to the screen. */
 fun Context.showToast(message: String, length: Int = Toast.LENGTH_SHORT){
 	Toast.makeText(this, message, length).show()
 }

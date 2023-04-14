@@ -49,20 +49,6 @@ class SearchViewModel @Inject constructor(
 		}
 	}
 
-	private fun onSearchResults(result: List<UiCategorisedMovieComplete>) {
-		if (result.isEmpty()) {
-			onEmptyCacheResults(queryStateFlow.value)
-		} else {
-			onAnimalList(result)
-		}
-	}
-
-	private fun onEmptyCacheResults(searchQuery: String) {
-		_state.update { oldState -> oldState.updateToSearchingRemotely() }
-		searchRemotely(searchQuery)
-	}
-
-
 	private fun onSearchParametersUpdate(event: SearchEvent) {
 		remoteSearchJob.cancel(
 			CancellationException("New search parameters incoming!")
@@ -74,10 +60,24 @@ class SearchViewModel @Inject constructor(
 		}
 	}
 
+	private fun onSearchResults(result: List<UiCategorisedMovieComplete>) {
+		if (result.isEmpty()) {
+			onEmptyCacheResults(queryStateFlow.value)
+		} else {
+			onMovieList(result)
+		}
+	}
+
+	private fun onEmptyCacheResults(searchQuery: String) {
+		_state.update { oldState -> oldState.updateToSearchingRemotely() }
+		searchRemotely(searchQuery)
+	}
+
 	private fun updateQuery(input: String) {
 		resetPagination()
 		queryStateFlow.value = input
 		Logger.i("Search query updated.")
+		_state.update { oldState -> oldState.updateToNoSearchQuery() }
 
 		if (input.isEmpty()) {
 			setNoSearchQueryState()
@@ -118,7 +118,7 @@ class SearchViewModel @Inject constructor(
 		_state.update { oldState -> oldState.updateToNoSearchQuery() }
 	}
 
-	private fun onAnimalList(movies: List<UiCategorisedMovieComplete>) {
+	private fun onMovieList(movies: List<UiCategorisedMovieComplete>) {
 		_state.update { oldState ->
 			oldState.updateToHasSearchResults(movies)
 		}

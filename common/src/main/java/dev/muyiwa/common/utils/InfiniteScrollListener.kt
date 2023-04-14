@@ -12,13 +12,13 @@ abstract class InfiniteScrollListener(
 		val visibleItemCount = layoutManager.childCount
 		val totalItemCount = layoutManager.itemCount
 		val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-//		val lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition()
+		val lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition()
 
 		if (isLoading().not() && isLastPage().not()) {
 			// Loads data when you get to the end of the recyclerview
-//			if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0 && lastVisibleItemPosition >= totalItemCount - 1){
+			if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0 && lastVisibleItemPosition >= totalItemCount - 1){
 			// Loads data when you get to the some rows before the end of the recyclerview
-			if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0 && totalItemCount >= pageSize) {
+//			if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0 && totalItemCount >= pageSize) {
 				loadMoreMovies()
 			}
 		}

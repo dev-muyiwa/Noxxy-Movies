@@ -56,6 +56,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), ItemClickListener {
 
 	private fun createInfiniteScrollListener(layoutManager: LinearLayoutManager):
 			RecyclerView.OnScrollListener {
+
 		return object : InfiniteScrollListener(layoutManager, viewModel.pageSize) {
 			override fun isLoading(): Boolean = viewModel.isLoadingMoreMovies
 

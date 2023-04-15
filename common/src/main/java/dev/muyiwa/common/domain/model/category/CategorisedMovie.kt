@@ -3,6 +3,7 @@ package dev.muyiwa.common.domain.model.category
 import dev.muyiwa.common.domain.utils.*
 
 data class Movie(
+	val isBookmarked: Boolean,
 	val isAdult: Boolean,
 	val backdropPath: String,
 	val genreIds: List<String>,

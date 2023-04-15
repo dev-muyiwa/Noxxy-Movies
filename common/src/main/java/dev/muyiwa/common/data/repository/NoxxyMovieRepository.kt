@@ -304,6 +304,12 @@ class NoxxyMovieRepository @Inject constructor(
 		}
 	}
 
+	override fun getAllBookmarkedMovies(): Flow<List<CategorisedMovie>> {
+		return dao.getBookmarkedMovies()
+			.distinctUntilChanged()
+			.map { movies -> movies.map { it.toDomainModel() } }
+	}
+
 	private suspend fun <T> retry(
 		times: Int = 5,
 		initialDelayMillis: Long = 1000,

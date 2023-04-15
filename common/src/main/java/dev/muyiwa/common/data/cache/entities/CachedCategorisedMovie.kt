@@ -3,10 +3,13 @@ package dev.muyiwa.common.data.cache.entities
 import androidx.room.*
 import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.utils.*
+import java.util.Date
 
 @Entity(tableName = CachedCategorisedMovie.tableName)
 data class CachedCategorisedMovie(
 	@PrimaryKey(autoGenerate = true) val id: Long = 0,
+	val isBookmarked: Boolean,
+//	val bookmarkedAt: Date,
 	val isAdult: Boolean,
 	val backdropPath: String,
 	val genreIds: List<String>,

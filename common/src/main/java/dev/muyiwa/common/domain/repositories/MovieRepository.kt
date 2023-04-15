@@ -19,6 +19,8 @@ interface MovieRepository {
 	fun searchCachedMoviesBy(query: String): Flow<List<Movie>>
 	suspend fun searchMoviesRemotely(query: String, pageToLoad: Int): PaginatedMovies
 
+	fun getAllBookmarkedMovies(): Flow<List<CategorisedMovie>>
+
 //	fun searchForMovies(lang: String, query: String): Flow<List<>>
 
 //	suspend fun getListOfGenres(): List<String>

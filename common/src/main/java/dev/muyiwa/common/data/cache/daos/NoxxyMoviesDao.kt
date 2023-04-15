@@ -51,4 +51,8 @@ interface NoxxyMoviesDao {
 
 	@Query("SELECT * FROM ${CachedCast.tableName} WHERE movieId = :id")
 	suspend fun getCastsById(id: Int): List<CachedCast>
+
+	//
+	@Query("SELECT * FROM ${CachedCategorisedMovie.tableName} WHERE isBookmarked = 1 ORDER BY id DESC")
+	fun getBookmarkedMovies(): Flow<List<CachedCategorisedMovie>>
 }

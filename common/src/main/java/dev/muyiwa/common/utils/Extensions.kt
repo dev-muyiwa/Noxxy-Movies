@@ -93,3 +93,21 @@ inline fun CoroutineScope.createExceptionHandler(
 	}
 }
 
+fun String.createExceptionHandler(
+	scope: CoroutineScope,
+	block: () -> Unit
+): CoroutineExceptionHandler {
+	return scope.createExceptionHandler(this) {
+		block()
+	}
+}
+
+//inline fun CoroutineScope.customLaunch(
+//	block: () -> Unit,
+//	message: String
+//) {
+//	this.launch(message.createExceptionHandler(this)){
+//		blo
+//	}
+//}
+

@@ -13,7 +13,6 @@ import dev.muyiwa.common.domain.model.detail.*
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.presentation.model.*
 
-// Domain Mapping
 fun ApiCategorisedMovieResponse.toDomainModel(category: Category): CategorisedPaginatedMovies {
 	return CategorisedPaginatedMovies(
 		movies = movies.orEmpty().map { it !!.toDomainModel(category) },
@@ -43,6 +42,7 @@ fun ApiMovie.toDomainModel(category: Category): CategorisedMovie {
 
 fun ApiMovie.toMovie(): Movie {
 	return Movie(
+		isBookmarked = false,
 		isAdult = isAdult ?: false,
 		backdropPath = IMAGE_BASE_ENDPOINT + BACKDROP_SIZE + backdropPath.orEmpty(),
 		genreIds = genreIds.orEmpty().map { it?.toGenreName().orEmpty() },
@@ -76,6 +76,7 @@ fun Movie.toCategorisedMovie(): CategorisedMovie {
 
 fun CachedCategorisedMovie.toMovie(): Movie {
 	return Movie(
+		isBookmarked = isBookmarked,
 		isAdult = isAdult,
 		backdropPath = backdropPath,
 		genreIds = genreIds,
@@ -132,6 +133,7 @@ fun CachedMovieDetails.toDomainModel(movie: CachedCategorisedMovie): MovieDetail
 // Cache Mapping
 fun CategorisedMovie.toCacheModel(): CachedCategorisedMovie {
 	return CachedCategorisedMovie(
+		isBookmarked = movie.isBookmarked,
 		isAdult = movie.isAdult,
 		backdropPath = movie.backdropPath,
 		genreIds = movie.genreIds,

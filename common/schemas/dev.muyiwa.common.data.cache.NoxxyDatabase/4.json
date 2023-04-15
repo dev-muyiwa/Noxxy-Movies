@@ -2,15 +2,21 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "24b76a37aad17621007c266b14ed5da6",
+    "identityHash": "486023ede1d889b60ac2695dadb2fb9d",
     "entities": [
       {
         "tableName": "categorised_movie",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `isAdult` INTEGER NOT NULL, `backdropPath` TEXT NOT NULL, `genreIds` TEXT NOT NULL, `movieId` INTEGER NOT NULL, `originalLanguage` TEXT NOT NULL, `originalTitle` TEXT NOT NULL, `overview` TEXT NOT NULL, `popularity` REAL NOT NULL, `posterPath` TEXT NOT NULL, `releaseDate` TEXT NOT NULL, `title` TEXT NOT NULL, `video` INTEGER NOT NULL, `voteAverage` REAL NOT NULL, `voteCount` INTEGER NOT NULL, `category` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `isBookmarked` INTEGER NOT NULL, `isAdult` INTEGER NOT NULL, `backdropPath` TEXT NOT NULL, `genreIds` TEXT NOT NULL, `movieId` INTEGER NOT NULL, `originalLanguage` TEXT NOT NULL, `originalTitle` TEXT NOT NULL, `overview` TEXT NOT NULL, `popularity` REAL NOT NULL, `posterPath` TEXT NOT NULL, `releaseDate` TEXT NOT NULL, `title` TEXT NOT NULL, `video` INTEGER NOT NULL, `voteAverage` REAL NOT NULL, `voteCount` INTEGER NOT NULL, `category` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isBookmarked",
+            "columnName": "isBookmarked",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -232,7 +238,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '24b76a37aad17621007c266b14ed5da6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '486023ede1d889b60ac2695dadb2fb9d')"
     ]
   }
 }

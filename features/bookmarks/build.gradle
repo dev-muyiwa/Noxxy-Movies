@@ -43,6 +43,8 @@ android {
 }
 
 dependencies {
+    implementation project(":common")
+    implementation project(":logging")
     implementation projectLibs.androidx.ktx
     implementation projectLibs.appcompat
     implementation projectLibs.google.material

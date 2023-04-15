@@ -5,13 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".presentation.BookmarksFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
+        android:id="@+id/bookmarks_rv"
         android:layout_height="match_parent"
-        android:textSize="22sp"
-        android:textColor="@android:color/white"
-        android:gravity="center"
-        android:text="Bookmarks Feature" />
+        android:scrollbars="vertical"
+        tools:listitem="@layout/layout_category_item_grid" />
 
 </FrameLayout>

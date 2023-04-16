@@ -19,6 +19,10 @@ fun Context.isTablet(): Boolean = resources.getBoolean(R.bool.is_tablet)
 
 fun Boolean.gridSize(): Int = if (this) 3 else 2
 
+fun Context.spanCount(): Int {
+	return if (isTablet()) 3 else 2
+}
+
 /** This extension function shortens the loading of images into an ImageView. */
 fun ImageView.loadImage(url: String) {
 	val imageLoader = ImageLoader.Builder(context)

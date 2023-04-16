@@ -23,7 +23,7 @@ class BookmarksFragment : Fragment(R.layout.fragment_bookmarks), ItemClickListen
 			CompleteCategorisedMoviesAdapter(requireContext(), this)
 		binding.bookmarksRv.apply {
 			layoutManager =
-				GridLayoutManager(requireContext(), requireContext().isTablet().gridSize())
+				GridLayoutManager(requireContext(), requireContext().spanCount())
 			adapter = bookmarksAdapter
 			hasFixedSize()
 		}

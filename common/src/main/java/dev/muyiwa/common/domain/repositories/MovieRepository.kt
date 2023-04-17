@@ -15,6 +15,7 @@ interface MovieRepository {
 
 	fun getAllCategorisedMovies(lang: String, pageToLoad: Int = 1, noOfItems: Int = 10): Flow<Resource<List<List<CategorisedMovie>>>>
 	fun getMovieDetail(lang: String, movieId: Int): Flow<Resource<MovieDetail>>
+	suspend fun getMovieCasts(id: Int): List<Cast> = emptyList()
 
 	fun searchCachedMoviesBy(query: String): Flow<List<Movie>>
 	suspend fun searchMoviesRemotely(query: String, pageToLoad: Int): PaginatedMovies

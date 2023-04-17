@@ -206,6 +206,10 @@ class NoxxyMovieRepository @Inject constructor(
 			try {
 				retry {
 					val apiMovieDetail = api.fetchMovieDetailsById(movieId.toLong())
+					val apiCasts = CoroutineScope(dispatchersProvider.io()).async {
+						api.fetchCastsByMovieId(movieId.toLong())
+					}
+					Logger.d("Casts are => ${apiCasts.await()}")
 					dao.apply {
 						deleteMovieDetail(movieId)
 						insertMovieDetails(

@@ -7,6 +7,7 @@ import dev.muyiwa.common.domain.model.detail.*
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.presentation.*
 import dev.muyiwa.common.utils.*
+import dev.muyiwa.logging.*
 import dev.muyiwa.noxxy.details.domain.usecases.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -15,6 +16,7 @@ import javax.inject.*
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
 	private val getMovieDetail: GetMovieDetail,
+	private val toggleBookmark: ToggleBookmark,
 	savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 	private val _state = MutableStateFlow(MovieDetailState())
@@ -28,6 +30,20 @@ class MovieDetailViewModel @Inject constructor(
 	init {
 		savedStateHandle.get<Int>(MOVIE_ID)?.let { id ->
 			getDetailsOfMovie(id)
+		}
+	}
+
+	fun onEvent(event: MovieDetailEvent) {
+		when (event) {
+			MovieDetailEvent.ToggleBookmarkOption -> toggleBookmarkedMovie()
+		}
+	}
+
+	private fun toggleBookmarkedMovie() {
+		viewModelScope.launch(exceptionHandler) {
+			Logger.d("Movie bookmark toggled.")
+			_state.value.movieDetail?.movie?.basicCategorisedMovie?.let { it.movieId }
+				?.let { toggleBookmark(it) }
 		}
 	}
 

@@ -168,6 +168,7 @@ fun MovieDetail.toCacheModel(): CachedMovieDetails {
 // UI Mapping
 fun CategorisedMovie.toUiModel(): UiCategorisedMovie {
 	return UiCategorisedMovie(
+		isBookmarked = movie.isBookmarked,
 		movieId = movie.movieId,
 		posterPath = movie.posterPath,
 		title = movie.title,

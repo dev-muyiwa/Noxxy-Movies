@@ -310,6 +310,10 @@ class NoxxyMovieRepository @Inject constructor(
 			.map { movies -> movies.map { it.toDomainModel() } }
 	}
 
+	override suspend fun toggleBookmarkedMovie(id: Int): Boolean {
+		return dao.getCategorisedMovieById(id).isBookmarked.not()
+	}
+
 	private suspend fun <T> retry(
 		times: Int = 5,
 		initialDelayMillis: Long = 1000,

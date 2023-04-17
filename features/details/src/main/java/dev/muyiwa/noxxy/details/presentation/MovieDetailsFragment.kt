@@ -39,6 +39,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 			setOnMenuItemClickListener {
 				when(it.itemId) {
 					R.id.bookmark_icon -> {
+						viewModel.onEvent(MovieDetailEvent.ToggleBookmarkOption)
 						//
 						if (isBookmarked){
 							it.setIcon(R.drawable.ic_round_bookmark_remove_24)
@@ -76,8 +77,9 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
 		lifecycleScope.launch {
 			viewModel.state.collect { detail ->
-//				val isBookmarked = it.movieDetail?.movie?.basicCategorisedMovie?.isFavorite
+				val isBookmarked = detail.movieDetail?.movie?.basicCategorisedMovie?.let { it.isBookmarked }
 				detail.movieDetail?.let { movieDetail ->
+//					binding.toolbar.menu.findItem(R.id.bookmark_icon).setIcon()
 					binding.backdropImage.loadImage(movieDetail.movie.backdropPath)
 					binding.poster.loadImage(movieDetail.movie.basicCategorisedMovie.posterPath)
 					"${movieDetail.movie.basicCategorisedMovie.title} (${

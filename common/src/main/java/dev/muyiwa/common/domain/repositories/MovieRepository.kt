@@ -20,6 +20,7 @@ interface MovieRepository {
 	suspend fun searchMoviesRemotely(query: String, pageToLoad: Int): PaginatedMovies
 
 	fun getAllBookmarkedMovies(): Flow<List<CategorisedMovie>>
+	suspend fun toggleBookmarkedMovie(id: Int): Boolean
 
 //	fun searchForMovies(lang: String, query: String): Flow<List<>>
 

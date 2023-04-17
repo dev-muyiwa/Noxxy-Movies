@@ -6,6 +6,7 @@ import dev.muyiwa.bookmarks.domain.usecases.*
 import dev.muyiwa.common.presentation.*
 import dev.muyiwa.common.presentation.model.*
 import dev.muyiwa.common.utils.*
+import dev.muyiwa.logging.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import javax.inject.*
@@ -24,6 +25,7 @@ class BookmarksViewModel @Inject constructor(
 	private fun subscribeToBookmarkedMovies() {
 		val message = "Unable to get bookmarked movies."
 		viewModelScope.launch(message.createExceptionHandler()) {
+			Logger.d("Getting bookmarked movies.")
 			getBookmarkedMovies()
 				.map { movies -> movies.map { it.toFullUiModel() } }
 				.filter { it.isNotEmpty() }

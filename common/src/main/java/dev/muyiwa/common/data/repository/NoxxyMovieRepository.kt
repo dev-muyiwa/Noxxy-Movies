@@ -206,6 +206,10 @@ class NoxxyMovieRepository @Inject constructor(
 			try {
 				retry {
 					val apiMovieDetail = api.fetchMovieDetailsById(movieId.toLong())
+					val apiCasts = CoroutineScope(dispatchersProvider.io()).async {
+						api.fetchCastsByMovieId(movieId.toLong())
+					}
+					Logger.d("Casts are => ${apiCasts.await()}")
 					dao.apply {
 						deleteMovieDetail(movieId)
 						insertMovieDetails(
@@ -308,6 +312,10 @@ class NoxxyMovieRepository @Inject constructor(
 		return dao.getBookmarkedMovies()
 			.distinctUntilChanged()
 			.map { movies -> movies.map { it.toDomainModel() } }
+	}
+
+	override suspend fun toggleBookmarkedMovie(id: Int): Boolean {
+		return dao.getCategorisedMovieById(id).isBookmarked.not()
 	}
 
 	private suspend fun <T> retry(

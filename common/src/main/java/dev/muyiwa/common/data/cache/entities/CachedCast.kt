@@ -4,7 +4,8 @@ import androidx.room.*
 
 @Entity(tableName = CachedCast.tableName)
 data class CachedCast(
-	@PrimaryKey(autoGenerate = false) val movieId: Int,
+	@PrimaryKey(autoGenerate = true) val id: Int = 0,
+	val movieId: Int,
 	val originalName: String,
 	val profilePath: String,
 	val character: String

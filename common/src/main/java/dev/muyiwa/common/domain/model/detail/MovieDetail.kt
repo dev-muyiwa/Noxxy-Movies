@@ -9,5 +9,6 @@ data class MovieDetail(
 	val revenue: Long,
 	val runtime: Int,
 	val status: String,
-	val tagline: String
+	val tagline: String,
+	val casts: List<Cast>
 )

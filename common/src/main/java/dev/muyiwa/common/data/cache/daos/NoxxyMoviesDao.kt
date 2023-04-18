@@ -13,10 +13,6 @@ interface NoxxyMoviesDao {
 	@Query("SELECT *  FROM ${CachedCategorisedMovie.tableName} WHERE category = :category")
 	fun getAllMoviesByCategory(category: Category): Flow<List<CachedCategorisedMovie>>
 
-//	@Query("SELECT * FROM movies WHERE title LIKE '%' || :searchQuery || '%'")
-//	fun searchMovies(searchQuery: String): List<Movie>
-
-
 	@Query("SELECT *  FROM ${CachedCategorisedMovie.tableName} " +
 			"WHERE title LIKE '%' || :query || '%'")
 	fun searchMoviesByTitle(query: String): Flow<List<CachedCategorisedMovie>>
@@ -51,6 +47,16 @@ interface NoxxyMoviesDao {
 
 	@Query("SELECT * FROM ${CachedCast.tableName} WHERE movieId = :id")
 	suspend fun getCastsById(id: Int): List<CachedCast>
+
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
+	suspend fun insertCast(cast: CachedCast)
+
+	suspend fun insertAllCasts(casts: List<CachedCast>){
+		casts.forEach { cast -> insertCast(cast) }
+	}
+
+	@Query("DELETE FROM ${CachedCast.tableName} WHERE movieId = :id")
+	suspend fun deleteCastById(id: Int)
 
 	//
 	@Query("SELECT * FROM ${CachedCategorisedMovie.tableName} WHERE isBookmarked = 1 ORDER BY id DESC")

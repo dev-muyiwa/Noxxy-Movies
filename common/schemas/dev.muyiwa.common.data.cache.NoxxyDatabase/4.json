@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "486023ede1d889b60ac2695dadb2fb9d",
+    "identityHash": "9d5cf9c37bfc89056df1d70cc3f4da32",
     "entities": [
       {
         "tableName": "categorised_movie",
@@ -178,8 +178,14 @@
       },
       {
         "tableName": "casts",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `originalName` TEXT NOT NULL, `profilePath` TEXT NOT NULL, `character` TEXT NOT NULL, PRIMARY KEY(`movieId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `movieId` INTEGER NOT NULL, `originalName` TEXT NOT NULL, `profilePath` TEXT NOT NULL, `character` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "movieId",
             "columnName": "movieId",
@@ -206,9 +212,9 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": false,
+          "autoGenerate": true,
           "columnNames": [
-            "movieId"
+            "id"
           ]
         },
         "indices": [],
@@ -238,7 +244,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '486023ede1d889b60ac2695dadb2fb9d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9d5cf9c37bfc89056df1d70cc3f4da32')"
     ]
   }
 }

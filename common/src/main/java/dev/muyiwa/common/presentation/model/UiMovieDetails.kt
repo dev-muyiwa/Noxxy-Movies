@@ -1,6 +1,6 @@
 package dev.muyiwa.common.presentation.model
 
-import androidx.room.*
+import dev.muyiwa.common.domain.model.detail.*
 
 data class UiMovieDetails(
 	val movie: UiCategorisedMovieComplete,
@@ -9,5 +9,6 @@ data class UiMovieDetails(
 	val revenue: Long,
 	val runtime: String,
 	val status: String,
-	val tagline: String
+	val tagline: String,
+	val casts: List<Cast>
 )

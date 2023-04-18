@@ -26,10 +26,10 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 		val binding = FragmentMovieDetailsBinding.bind(view)
 		var isBookmarked = false
 		binding.appbarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-			binding.posterLayout.isVisible =
-				abs(verticalOffset) - appBarLayout.totalScrollRange != 0
-			binding.body.posterFrame.isVisible =
-				abs(verticalOffset) - appBarLayout.totalScrollRange != 0
+//			binding.posterLayout.isVisible =
+//				abs(verticalOffset) - appBarLayout.totalScrollRange != 0
+//			binding.body.posterFrame.isVisible =
+//				abs(verticalOffset) - appBarLayout.totalScrollRange != 0
 		}
 		binding.toolbar.apply {
 			setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
@@ -73,7 +73,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 				LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 			adapter = genreAdapter
 		}
-		binding.body.homepage.movementMethod = LinkMovementMethod.getInstance()
+//		binding.body.homepage.movementMethod = LinkMovementMethod.getInstance()
 
 		lifecycleScope.launch {
 			viewModel.state.collect { detail ->
@@ -81,7 +81,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 				detail.movieDetail?.let { movieDetail ->
 //					binding.toolbar.menu.findItem(R.id.bookmark_icon).setIcon()
 					binding.backdropImage.loadImage(movieDetail.movie.backdropPath)
-					binding.poster.loadImage(movieDetail.movie.basicCategorisedMovie.posterPath)
+					binding.body.posterImage.loadImage(movieDetail.movie.basicCategorisedMovie.posterPath)
 					"${movieDetail.movie.basicCategorisedMovie.title} (${
 						movieDetail.movie.releaseDate.split("-")[0]
 					})".also { binding.body.movieTitle.text = it }
@@ -89,11 +89,12 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 						movieDetail.movie.basicCategorisedMovie.voteAverage.div(2).toFloat()
 					binding.body.ratingText.text =
 						"${movieDetail.movie.basicCategorisedMovie.voteAverage}"
-					binding.body.runtime.text = movieDetail.runtime
+					binding.body.runtime.text = "Runtime: " + movieDetail.runtime
 					genreAdapter.submitList(movieDetail.movie.genreIds)
 					binding.body.movieDescription.text = movieDetail.movie.overview
-					binding.body.releaseDate.text = movieDetail.movie.releaseDate
-					binding.body.homepage.text = movieDetail.homepage
+					binding.body.cast.text = movieDetail.casts.toString()
+//					binding.body.releaseDate.text = movieDetail.movie.releaseDate
+//					binding.body.homepage.text = movieDetail.homepage
 				}
 				handleFailure(detail.failure)
 			}

@@ -102,23 +102,28 @@ fun ApiMovieDetails.toDomainModel(movie: CategorisedMovie): MovieDetail {
 		revenue = revenue ?: 0,
 		runtime = runtime ?: 0,
 		status = status.orEmpty(),
-		tagline = tagline.orEmpty()
+		tagline = tagline.orEmpty(),
+		casts = emptyList()
 	)
 }
 
 fun ApiCast.toDomainModel(): Cast {
 	return Cast(
 		originalName = originalName.asUnknown(),
-		profilePath = profilePath.asUnknown(),
+		profilePath = IMAGE_BASE_ENDPOINT + PROFILE_SIZE + profilePath.asUnknown(),
 		character = character.asUnknown()
 	)
 }
 
 fun Cast.toCachedModel(movieId: Int): CachedCast {
-	return CachedCast(movieId, originalName, profilePath, character)
+	return CachedCast(movieId = movieId, originalName = originalName, profilePath = profilePath, character = character)
 }
 
-fun CachedMovieDetails.toDomainModel(movie: CachedCategorisedMovie): MovieDetail {
+fun CachedCast.toDomainModel(): Cast {
+	return Cast(originalName, profilePath, character)
+}
+
+fun CachedMovieDetails.toDomainModel(movie: CachedCategorisedMovie, casts: List<CachedCast>): MovieDetail {
 	return MovieDetail(
 		movie = movie.toDomainModel(),
 		budget = budget,
@@ -126,7 +131,8 @@ fun CachedMovieDetails.toDomainModel(movie: CachedCategorisedMovie): MovieDetail
 		revenue = revenue,
 		runtime = runtime,
 		status = status,
-		tagline = tagline
+		tagline = tagline,
+		casts = casts.map { it.toDomainModel() }
 	)
 }
 
@@ -197,16 +203,9 @@ fun MovieDetail.toUiModel(): UiMovieDetails {
 		budget = budget,
 		homepage = homepage,
 		revenue = revenue,
-		runtime = "$runtime min",
+		runtime = "$runtime mins",
 		status = status,
-		tagline = tagline
+		tagline = tagline,
+		casts = casts
 	)
-}
-
-fun ApiGenre.toDomainModel(): Genre {
-	return Genre(id = id ?: 0, name = name.orEmpty())
-}
-
-fun Genre.toUiModel(): UiGenre {
-	return UiGenre(name = name)
 }

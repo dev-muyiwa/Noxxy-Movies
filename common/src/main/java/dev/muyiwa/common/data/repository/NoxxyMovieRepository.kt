@@ -201,24 +201,31 @@ class NoxxyMovieRepository @Inject constructor(
 		return flow {
 			emit(Resource.Loading())
 			val categorisedMovie = dao.getCategorisedMovieById(movieId)
-			val movieDetail = dao.getMovieDetails(movieId)?.toDomainModel(categorisedMovie)
+			val casts = dao.getCastsById(movieId)
+			val movieDetail = dao.getMovieDetails(movieId)?.toDomainModel(categorisedMovie, casts)
 			emit(Resource.Loading(movieDetail))
 			try {
 				retry {
-					val apiMovieDetail = api.fetchMovieDetailsById(movieId.toLong())
+//					val apiMovieDetail = api.fetchMovieDetailsById(movieId.toLong())
+					val apiMovieDetail = CoroutineScope(dispatchersProvider.io()).async {
+						api.fetchMovieDetailsById(movieId.toLong())
+					}
 					val apiCasts = CoroutineScope(dispatchersProvider.io()).async {
 						api.fetchCastsByMovieId(movieId.toLong())
 					}
-					Logger.d("Casts are => ${apiCasts.await()}")
+					val casts = apiCasts.await().cast.orEmpty()
+					val details = apiMovieDetail.await()
 					dao.apply {
 						deleteMovieDetail(movieId)
 						insertMovieDetails(
-							apiMovieDetail.toDomainModel(
-								categorisedMovie.toDomainModel()
-							)
+							details.toDomainModel(categorisedMovie.toDomainModel())
 								.toCacheModel()
 						)
+						deleteCastById(movieId)
+						insertAllCasts(casts.map { it.toDomainModel().toCachedModel(movieId) })
 					}
+					Logger.d("DAO Casts are => ${dao.getCastsById(movieId)}")
+
 				}
 			} catch (e: NetworkUnavailableException) {
 				Logger.e("${e.message}", e)
@@ -237,7 +244,8 @@ class NoxxyMovieRepository @Inject constructor(
 					)
 				)
 			}
-			val updatedMovieDetail = dao.getMovieDetails(movieId)?.toDomainModel(categorisedMovie)
+			val updatedCasts = dao.getCastsById(movieId)
+			val updatedMovieDetail = dao.getMovieDetails(movieId)?.toDomainModel(categorisedMovie, updatedCasts)
 			emit(Resource.Success(updatedMovieDetail))
 		}
 	}

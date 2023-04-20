@@ -111,25 +111,61 @@
             android:textColor="#CBCFCFCF"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/director"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/movie_description"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="12dp"
-            android:textColor="@color/gray"
-            tools:text="Director: Shawn Mendes" />
+<!--        <TextView-->
+<!--            android:id="@+id/director"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@id/movie_description"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:layout_marginBottom="12dp"-->
+<!--            android:textColor="@color/gray"-->
+<!--            tools:text="Director: Shawn Mendes" />-->
 
 
         <TextView
             android:id="@+id/cast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/director"
+            android:layout_below="@id/movie_description"
             android:gravity="center_vertical"
+            android:layout_marginBottom="8dp"
             android:textColor="@color/gray"
-            tools:text="Cast:" />
+            android:text="Cast:" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/casts_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cast"
+            android:layout_marginBottom="12dp"
+            tools:itemCount="1"
+            tools:listitem="@layout/layout_cast_item" />
+
+        <TextView
+            android:id="@+id/reviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/casts_rv"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:text="Reviews:"
+            android:textColor="@color/gray"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reviews_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/reviews" />
+
+        <TextView
+            android:id="@+id/no_reviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/reviews_rv"
+            android:text="No reviews found."
+            android:textColor="@color/gray" />
+
 
     </RelativeLayout>
 

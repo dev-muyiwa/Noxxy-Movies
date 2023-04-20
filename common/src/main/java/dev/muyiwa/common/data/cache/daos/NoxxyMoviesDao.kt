@@ -2,6 +2,7 @@ package dev.muyiwa.common.data.cache.daos
 
 import androidx.room.*
 import dev.muyiwa.common.data.cache.entities.*
+import dev.muyiwa.common.data.cache.entities.video.*
 import dev.muyiwa.common.domain.utils.*
 import kotlinx.coroutines.flow.*
 
@@ -58,7 +59,24 @@ interface NoxxyMoviesDao {
 	@Query("DELETE FROM ${CachedCast.tableName} WHERE movieId = :id")
 	suspend fun deleteCastById(id: Int)
 
+	@Query("SELECT * FROM ${CachedReview.tableName} WHERE movieId = :id")
+	suspend fun getReviewsById(id: Int): List<CachedReview>
+
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
+	suspend fun insertReview(review: CachedReview)
+
+	suspend fun insertAllReviews(reviews: List<CachedReview>){
+		reviews.forEach { review -> insertReview(review) }
+	}
+
+	@Query("DELETE FROM ${CachedReview.tableName} WHERE movieId = :id")
+	suspend fun deleteReviewById(id: Int)
+
 	//
 	@Query("SELECT * FROM ${CachedCategorisedMovie.tableName} WHERE isBookmarked = 1 ORDER BY id DESC")
 	fun getBookmarkedMovies(): Flow<List<CachedCategorisedMovie>>
+
+
+	@Query("SELECT * FROM ${CachedVideo.tableName} WHERE movieId = :id ORDER BY publishedAt DESC")
+	suspend fun getAllVideosBy(id: Int): List<CachedVideo>
 }

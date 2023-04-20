@@ -37,24 +37,6 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-<!--    <com.google.android.material.card.MaterialCardView-->
-<!--        android:layout_width="135dp"-->
-<!--        android:layout_height="200dp"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:id="@+id/poster_layout"-->
-<!--        app:cardCornerRadius="5dp"-->
-<!--        android:visibility="gone"-->
-<!--        app:layout_anchor="@id/appbar_layout"-->
-<!--        app:layout_anchorGravity="bottom|start">-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/poster"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:layout_height="match_parent" />-->
-
-<!--    </com.google.android.material.card.MaterialCardView>-->
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_play"
         android:layout_width="wrap_content"

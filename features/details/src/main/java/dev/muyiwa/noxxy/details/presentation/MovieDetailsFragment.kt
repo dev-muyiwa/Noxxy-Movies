@@ -1,7 +1,6 @@
 package dev.muyiwa.noxxy.details.presentation
 
 import android.os.*
-import android.text.method.*
 import android.view.*
 import android.widget.*
 import androidx.core.view.*
@@ -9,6 +8,7 @@ import androidx.fragment.app.*
 import androidx.lifecycle.*
 import androidx.navigation.fragment.*
 import androidx.recyclerview.widget.*
+import com.google.android.material.appbar.*
 import dagger.hilt.android.*
 import dev.muyiwa.common.presentation.*
 import dev.muyiwa.common.utils.*
@@ -26,10 +26,13 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 		val binding = FragmentMovieDetailsBinding.bind(view)
 		var isBookmarked = false
 		binding.appbarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-//			binding.posterLayout.isVisible =
-//				abs(verticalOffset) - appBarLayout.totalScrollRange != 0
-//			binding.body.posterFrame.isVisible =
-//				abs(verticalOffset) - appBarLayout.totalScrollRange != 0
+//			var margin = - (verticalOffset * 2)
+//			margin = max(margin, 0)
+//			margin = min(margin, binding.toolbar.height)
+//			val params =
+//				binding.collapsingToolbarLayout.layoutParams as CollapsingToolbarLayout.LayoutParams
+//			params.setMargins(0, 0, 0, margin)
+//			binding.collapsingToolbarLayout.layoutParams = params
 		}
 		binding.toolbar.apply {
 			setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
@@ -68,18 +71,29 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
 		}
 		val genreAdapter = GenreAdapter()
+		val castsAdapter = CastsAdapter()
+		val reviewsAdapter = ReviewsAdapter()
 		binding.body.genreRv.apply {
 			layoutManager =
 				LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 			adapter = genreAdapter
 		}
-//		binding.body.homepage.movementMethod = LinkMovementMethod.getInstance()
+		binding.body.castsRv.apply {
+			layoutManager =
+				LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+			adapter = castsAdapter
+		}
+		binding.body.reviewsRv.apply {
+			layoutManager =
+				LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+			adapter = reviewsAdapter
+		}
 
 		lifecycleScope.launch {
 			viewModel.state.collect { detail ->
-				val isBookmarked = detail.movieDetail?.movie?.basicCategorisedMovie?.let { it.isBookmarked }
+				val isBookmarked =
+					detail.movieDetail?.movie?.basicCategorisedMovie?.let { it.isBookmarked }
 				detail.movieDetail?.let { movieDetail ->
-//					binding.toolbar.menu.findItem(R.id.bookmark_icon).setIcon()
 					binding.backdropImage.loadImage(movieDetail.movie.backdropPath)
 					binding.body.posterImage.loadImage(movieDetail.movie.basicCategorisedMovie.posterPath)
 					"${movieDetail.movie.basicCategorisedMovie.title} (${
@@ -92,9 +106,9 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 					binding.body.runtime.text = "Runtime: " + movieDetail.runtime
 					genreAdapter.submitList(movieDetail.movie.genreIds)
 					binding.body.movieDescription.text = movieDetail.movie.overview
-					binding.body.cast.text = movieDetail.casts.toString()
-//					binding.body.releaseDate.text = movieDetail.movie.releaseDate
-//					binding.body.homepage.text = movieDetail.homepage
+					castsAdapter.submitList(movieDetail.casts)
+					reviewsAdapter.submitList(movieDetail.reviews)
+					binding.body.noReviews.isVisible = movieDetail.reviews.isEmpty()
 				}
 				handleFailure(detail.failure)
 			}

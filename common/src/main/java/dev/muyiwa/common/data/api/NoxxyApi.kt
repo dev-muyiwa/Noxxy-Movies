@@ -5,6 +5,7 @@ import dev.muyiwa.common.data.api.model.casts.*
 import dev.muyiwa.common.data.api.model.categorised_movie.*
 import dev.muyiwa.common.data.api.model.details.*
 import dev.muyiwa.common.data.api.model.genre.*
+import dev.muyiwa.common.data.api.model.reviews.*
 import dev.muyiwa.common.data.api.model.search.*
 import dev.muyiwa.common.data.api.utils.*
 import retrofit2.http.*
@@ -56,4 +57,17 @@ interface NoxxyApi {
 		@Query(QUERY) searchQuery: String,
 		@Query(PAGE) pageToLoad: Int,
 	): ApiSearchResponse
+
+	@GET(REVIEW_ENDPOINT)
+	suspend fun getReviews(
+		@Path(MOVIE_ID) id: Long,
+		@Query(LANG) language: String,
+		@Query(PAGE) pageToLoad: Int
+	): ApiReviewResponse
+
+	@GET()
+	suspend fun getVideos(
+		@Path(MOVIE_ID) id: Long,
+		@Query(LANG) language: String
+	)
 }

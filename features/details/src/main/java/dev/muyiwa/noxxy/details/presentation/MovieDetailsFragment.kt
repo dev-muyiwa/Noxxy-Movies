@@ -89,6 +89,12 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 			adapter = reviewsAdapter
 		}
 
+		binding.fabPlay.setOnClickListener{
+			val action = MovieDetailsFragmentDirections
+				.actionMovieDetailsFragmentToVideosFragment(viewModel.movieId)
+			findNavController().navigate(action)
+		}
+
 		lifecycleScope.launch {
 			viewModel.state.collect { detail ->
 				val isBookmarked =

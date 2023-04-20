@@ -41,6 +41,9 @@ class MainActivity : AppCompatActivity() {
 				binding.bottomNavView.isVisible = true
 
 			}
+			if (nd.id == dev.muyiwa.noxxy.details.R.id.videosFragment){
+				binding.bottomNavView.isVisible = false
+			}
 		}
 	}
 

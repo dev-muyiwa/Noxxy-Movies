@@ -7,6 +7,7 @@ import dev.muyiwa.common.data.api.model.details.*
 import dev.muyiwa.common.data.api.model.genre.*
 import dev.muyiwa.common.data.api.model.reviews.*
 import dev.muyiwa.common.data.api.model.search.*
+import dev.muyiwa.common.data.api.model.videos.*
 import dev.muyiwa.common.data.api.utils.*
 import retrofit2.http.*
 
@@ -65,9 +66,9 @@ interface NoxxyApi {
 		@Query(PAGE) pageToLoad: Int
 	): ApiReviewResponse
 
-	@GET()
+	@GET(VIDEO_INFO)
 	suspend fun getVideos(
 		@Path(MOVIE_ID) id: Long,
 		@Query(LANG) language: String
-	)
+	): ApiVideosResponse
 }

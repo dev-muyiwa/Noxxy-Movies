@@ -56,6 +56,7 @@ dependencies {
 
     implementation projectLibs.bundles.lifecycle
 
+    implementation projectLibs.youtube.player
 
     testImplementation projectLibs.junit
     androidTestImplementation projectLibs.androidx.junit

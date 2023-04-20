@@ -19,6 +19,7 @@ lifecycle_version = "2.6.1"
 timber_version = "5.0.1"
 coil_version = "2.3.0"
 paging_version = "3.1.1"
+youtube_player_version = "12.0.0"
 
 
 
@@ -63,6 +64,8 @@ timber-logging = { group = "com.jakewharton.timber", name = "timber", version.re
 # Image Loading
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil_version" }
 coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil_version" }
+
+youtube-player = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "youtube_player_version" }
 
 
 

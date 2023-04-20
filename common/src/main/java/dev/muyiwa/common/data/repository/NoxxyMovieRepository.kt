@@ -219,11 +219,13 @@ class NoxxyMovieRepository @Inject constructor(
 					val apiReviews = CoroutineScope(dispatchersProvider.io()).async {
 						api.getReviews(movieId.toLong(), lang, 1)
 					}
-//					val reviews = api.getReviews(movieId.toLong(), lang, 1).reviews.orEmpty().take(10)
-//					Logger.d("Reviews are => $reviews")
+//					val apiVideos = CoroutineScope(dispatchersProvider.io()).async {
+//						api.getVideos(movieId.toLong(), lang)
+//					}
 					val casts = apiCasts.await().cast.orEmpty()
 					val reviews = apiReviews.await().apiReviews
 					val details = apiMovieDetail.await()
+//					Logger.d("Videos => ${apiVideos.await().apiVideos.orEmpty().map {it!!.toDomainModel()}}")
 					dao.apply {
 						deleteMovieDetail(movieId)
 						insertMovieDetails(
@@ -235,8 +237,6 @@ class NoxxyMovieRepository @Inject constructor(
 						deleteReviewById(movieId)
 						insertAllReviews(reviews.orEmpty().map { it?.toDomainModel()!!.toCachedModel(movieId) })
 					}
-//					Logger.d("DAO Casts are => ${dao.getCastsById(movieId)}")
-
 				}
 			} catch (e: NetworkUnavailableException) {
 				Logger.e("${e.message}", e)
@@ -260,6 +260,20 @@ class NoxxyMovieRepository @Inject constructor(
 			val updatedMovieDetail = dao.getMovieDetails(movieId)
 				?.toDomainModel(categorisedMovie, updatedCasts, updatedReviews)
 			emit(Resource.Success(updatedMovieDetail))
+		}
+	}
+
+	override suspend fun getVideosBy(id: Int): List<Video> {
+		try {
+			val apiVideos = retry {
+				api.getVideos(id.toLong(), preferences.languageTag)
+			}
+
+			return apiVideos.apiVideos.orEmpty().map { it !!.toDomainModel() }
+		} catch (exception: HttpException) {
+			throw NetworkException(
+				exception.message() ?: "Code ${exception.code()}"
+			)
 		}
 	}
 

@@ -21,6 +21,7 @@ class MovieDetailViewModel @Inject constructor(
 ) : ViewModel() {
 	private val _state = MutableStateFlow(MovieDetailState())
 	val state = _state.asStateFlow()
+	var movieId = 0
 
 	private val errorMessage = "Failed to load movie detail"
 	private val exceptionHandler = viewModelScope.createExceptionHandler(errorMessage) {
@@ -29,6 +30,7 @@ class MovieDetailViewModel @Inject constructor(
 
 	init {
 		savedStateHandle.get<Int>(MOVIE_ID)?.let { id ->
+			movieId = id
 			getDetailsOfMovie(id)
 		}
 	}

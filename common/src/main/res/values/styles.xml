@@ -35,5 +35,8 @@
         <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
 
+    <style name="CircularImageOverlay" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
 
 </resources>

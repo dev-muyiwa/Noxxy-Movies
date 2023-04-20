@@ -200,9 +200,12 @@ class NoxxyMovieRepository @Inject constructor(
 	): Flow<Resource<MovieDetail>> {
 		return flow {
 			emit(Resource.Loading())
+			// fix the resource functions
 			val categorisedMovie = dao.getCategorisedMovieById(movieId)
 			val casts = dao.getCastsById(movieId)
-			val movieDetail = dao.getMovieDetails(movieId)?.toDomainModel(categorisedMovie, casts)
+			val reviews = dao.getReviewsById(movieId)
+			val movieDetail =
+				dao.getMovieDetails(movieId)?.toDomainModel(categorisedMovie, casts, reviews)
 			emit(Resource.Loading(movieDetail))
 			try {
 				retry {
@@ -213,7 +216,13 @@ class NoxxyMovieRepository @Inject constructor(
 					val apiCasts = CoroutineScope(dispatchersProvider.io()).async {
 						api.fetchCastsByMovieId(movieId.toLong())
 					}
+					val apiReviews = CoroutineScope(dispatchersProvider.io()).async {
+						api.getReviews(movieId.toLong(), lang, 1)
+					}
+//					val reviews = api.getReviews(movieId.toLong(), lang, 1).reviews.orEmpty().take(10)
+//					Logger.d("Reviews are => $reviews")
 					val casts = apiCasts.await().cast.orEmpty()
+					val reviews = apiReviews.await().apiReviews
 					val details = apiMovieDetail.await()
 					dao.apply {
 						deleteMovieDetail(movieId)
@@ -223,8 +232,10 @@ class NoxxyMovieRepository @Inject constructor(
 						)
 						deleteCastById(movieId)
 						insertAllCasts(casts.map { it.toDomainModel().toCachedModel(movieId) })
+						deleteReviewById(movieId)
+						insertAllReviews(reviews.orEmpty().map { it?.toDomainModel()!!.toCachedModel(movieId) })
 					}
-					Logger.d("DAO Casts are => ${dao.getCastsById(movieId)}")
+//					Logger.d("DAO Casts are => ${dao.getCastsById(movieId)}")
 
 				}
 			} catch (e: NetworkUnavailableException) {
@@ -245,7 +256,9 @@ class NoxxyMovieRepository @Inject constructor(
 				)
 			}
 			val updatedCasts = dao.getCastsById(movieId)
-			val updatedMovieDetail = dao.getMovieDetails(movieId)?.toDomainModel(categorisedMovie, updatedCasts)
+			val updatedReviews = dao.getReviewsById(movieId)
+			val updatedMovieDetail = dao.getMovieDetails(movieId)
+				?.toDomainModel(categorisedMovie, updatedCasts, updatedReviews)
 			emit(Resource.Success(updatedMovieDetail))
 		}
 	}

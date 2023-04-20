@@ -3,11 +3,12 @@ package dev.muyiwa.common.utils
 import dev.muyiwa.common.data.api.model.casts.*
 import dev.muyiwa.common.data.api.model.categorised_movie.*
 import dev.muyiwa.common.data.api.model.details.*
-import dev.muyiwa.common.data.api.model.genre.*
+import dev.muyiwa.common.data.api.model.reviews.*
 import dev.muyiwa.common.data.api.model.search.*
+import dev.muyiwa.common.data.api.model.videos.*
 import dev.muyiwa.common.data.api.utils.*
 import dev.muyiwa.common.data.cache.entities.*
-import dev.muyiwa.common.domain.model.*
+import dev.muyiwa.common.data.cache.entities.video.*
 import dev.muyiwa.common.domain.model.category.*
 import dev.muyiwa.common.domain.model.detail.*
 import dev.muyiwa.common.domain.utils.*
@@ -103,7 +104,39 @@ fun ApiMovieDetails.toDomainModel(movie: CategorisedMovie): MovieDetail {
 		runtime = runtime ?: 0,
 		status = status.orEmpty(),
 		tagline = tagline.orEmpty(),
-		casts = emptyList()
+		casts = emptyList(),
+		reviews = emptyList()
+	)
+}
+
+fun ApiVideo.toDomainModel(): Video {
+	return Video(
+		name = name.orEmpty(),
+		videoKey = key.orEmpty(),
+		type = type.orEmpty(),
+		publishedAt = publishedAt.orEmpty(),
+		videoId = id.orEmpty()
+	)
+}
+
+fun Video.toCachedModel(movieId: Int): CachedVideo {
+	return CachedVideo(
+		movieId = movieId,
+		name = name,
+		videoKey = videoKey,
+		type = type,
+		publishedAt = publishedAt,
+		videoId = videoId
+	)
+}
+
+fun CachedVideo.toDomainModel(): Video {
+	return Video(
+		name = name,
+		videoKey = videoKey,
+		type = type,
+		publishedAt = publishedAt,
+		videoId = videoId
 	)
 }
 
@@ -116,14 +149,35 @@ fun ApiCast.toDomainModel(): Cast {
 }
 
 fun Cast.toCachedModel(movieId: Int): CachedCast {
-	return CachedCast(movieId = movieId, originalName = originalName, profilePath = profilePath, character = character)
+	return CachedCast(
+		movieId = movieId,
+		originalName = originalName,
+		profilePath = profilePath,
+		character = character
+	)
 }
 
 fun CachedCast.toDomainModel(): Cast {
 	return Cast(originalName, profilePath, character)
 }
 
-fun CachedMovieDetails.toDomainModel(movie: CachedCategorisedMovie, casts: List<CachedCast>): MovieDetail {
+fun Review.toCachedModel(movieId: Int): CachedReview {
+	return CachedReview(movieId = movieId, author = author, content = comment)
+}
+
+fun CachedReview.toDomainModel(): Review {
+	return Review(author = author, comment = content)
+}
+
+fun ApiReview.toDomainModel(): Review {
+	return Review(author = author.orEmpty(), comment = content.orEmpty())
+}
+
+fun CachedMovieDetails.toDomainModel(
+	movie: CachedCategorisedMovie,
+	casts: List<CachedCast>,
+	reviews: List<CachedReview>
+): MovieDetail {
 	return MovieDetail(
 		movie = movie.toDomainModel(),
 		budget = budget,
@@ -132,7 +186,8 @@ fun CachedMovieDetails.toDomainModel(movie: CachedCategorisedMovie, casts: List<
 		runtime = runtime,
 		status = status,
 		tagline = tagline,
-		casts = casts.map { it.toDomainModel() }
+		casts = casts.map { it.toDomainModel() },
+		reviews = reviews.map { it.toDomainModel() }
 	)
 }
 
@@ -206,6 +261,7 @@ fun MovieDetail.toUiModel(): UiMovieDetails {
 		runtime = "$runtime mins",
 		status = status,
 		tagline = tagline,
-		casts = casts
+		casts = casts,
+		reviews = reviews
 	)
 }

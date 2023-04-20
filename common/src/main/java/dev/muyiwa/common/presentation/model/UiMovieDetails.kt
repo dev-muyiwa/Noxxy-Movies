@@ -10,5 +10,6 @@ data class UiMovieDetails(
 	val runtime: String,
 	val status: String,
 	val tagline: String,
-	val casts: List<Cast>
+	val casts: List<Cast>,
+	val reviews: List<Review>
 )

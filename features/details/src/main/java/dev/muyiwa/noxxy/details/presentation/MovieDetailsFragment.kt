@@ -3,19 +3,22 @@ package dev.muyiwa.noxxy.details.presentation
 import android.os.*
 import android.view.*
 import android.widget.*
+import androidx.core.content.*
 import androidx.core.view.*
 import androidx.fragment.app.*
 import androidx.lifecycle.*
 import androidx.navigation.fragment.*
 import androidx.recyclerview.widget.*
-import com.google.android.material.appbar.*
+import com.google.android.material.chip.*
+import com.google.android.material.shape.*
 import dagger.hilt.android.*
 import dev.muyiwa.common.presentation.*
 import dev.muyiwa.common.utils.*
 import dev.muyiwa.noxxy.details.R
 import dev.muyiwa.noxxy.details.databinding.*
 import kotlinx.coroutines.*
-import kotlin.math.*
+import kotlinx.coroutines.flow.*
+import dev.muyiwa.common.R as commonR
 
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
@@ -73,11 +76,11 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 		val genreAdapter = GenreAdapter()
 		val castsAdapter = CastsAdapter()
 		val reviewsAdapter = ReviewsAdapter()
-		binding.body.genreRv.apply {
-			layoutManager =
-				LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-			adapter = genreAdapter
-		}
+//		binding.body.genreRv.apply {
+//			layoutManager =
+//				LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+//			adapter = genreAdapter
+//		}
 		binding.body.castsRv.apply {
 			layoutManager =
 				LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -89,11 +92,15 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 			adapter = reviewsAdapter
 		}
 
-		binding.fabPlay.setOnClickListener{
+		binding.fabPlay.setOnClickListener {
 			val action = MovieDetailsFragmentDirections
 				.actionMovieDetailsFragmentToVideosFragment(viewModel.movieId)
 			findNavController().navigate(action)
 		}
+
+		val chipGroup = binding.body.genreChipGroup
+
+		val list = arrayListOf<String>()
 
 		lifecycleScope.launch {
 			viewModel.state.collect { detail ->
@@ -110,7 +117,30 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 					binding.body.ratingText.text =
 						"${movieDetail.movie.basicCategorisedMovie.voteAverage}"
 					binding.body.runtime.text = "Runtime: " + movieDetail.runtime
-					genreAdapter.submitList(movieDetail.movie.genreIds)
+//					genreAdapter.submitList(movieDetail.movie.genreIds)
+					movieDetail.movie.genreIds.distinct().forEach { genre ->
+						val chip = Chip(requireContext())
+						val chipShapeAppearance = chip.shapeAppearanceModel.toBuilder()
+							.setAllCorners(CornerFamily.ROUNDED, 12f) // set corner radius in dp
+							.build()
+						chip.text = genre
+						chip.setChipBackgroundColorResource(commonR.color.genre_bg_color)
+						chip.setTextColor(
+							ContextCompat.getColor(
+								requireContext(),
+								commonR.color.genre_text_color
+							)
+						)
+						chipGroup.chipSpacingVertical = 0
+						chip.isClickable = false
+						chip.isCheckable = false
+						chip.shapeAppearanceModel = chipShapeAppearance
+						if (chipGroup.contains(chip).not()) {
+							chipGroup.addView(chip, movieDetail.movie.genreIds.indexOf(chip.text))
+						}
+					}
+//					chipGroup.children.toSet()
+
 					binding.body.movieDescription.text = movieDetail.movie.overview
 					castsAdapter.submitList(movieDetail.casts)
 					reviewsAdapter.submitList(movieDetail.reviews)

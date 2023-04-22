@@ -47,6 +47,11 @@ class MovieVideosViewModel @Inject constructor(
 					oldState.copy(isLoading = false, failure = Event(failure))
 				}
 			}
+			else -> {
+				_state.update { oldState ->
+					oldState.copy(isLoading = false, failure = Event(failure))
+				}
+			}
 		}
 	}
 }

@@ -2,4 +2,6 @@
 <resources>
     <color name="yellow">#FBE25B</color>
     <color name="gray">#737373</color>
+    <color name="genre_bg_color">#91ACC4</color>
+    <color name="genre_text_color">#46647E</color>
 </resources>

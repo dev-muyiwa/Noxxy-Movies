@@ -17,7 +17,6 @@ import dev.muyiwa.common.utils.*
 import dev.muyiwa.noxxy.details.R
 import dev.muyiwa.noxxy.details.databinding.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 import dev.muyiwa.common.R as commonR
 
 @AndroidEntryPoint
@@ -28,15 +27,6 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 		super.onViewCreated(view, savedInstanceState)
 		val binding = FragmentMovieDetailsBinding.bind(view)
 		var isBookmarked = false
-		binding.appbarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-//			var margin = - (verticalOffset * 2)
-//			margin = max(margin, 0)
-//			margin = min(margin, binding.toolbar.height)
-//			val params =
-//				binding.collapsingToolbarLayout.layoutParams as CollapsingToolbarLayout.LayoutParams
-//			params.setMargins(0, 0, 0, margin)
-//			binding.collapsingToolbarLayout.layoutParams = params
-		}
 		binding.toolbar.apply {
 			setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
 			setNavigationIconTint(resources.getColor(R.color.toolbar_color))
@@ -104,8 +94,10 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
 		lifecycleScope.launch {
 			viewModel.state.collect { detail ->
-				val isBookmarked =
+				val isMovieBookmarked =
 					detail.movieDetail?.movie?.basicCategorisedMovie?.let { it.isBookmarked }
+				isMovieBookmarked?.setBookmarkIcon()
+					?.let { binding.toolbar.menu.findItem(R.id.bookmark_icon).setIcon(it) }
 				detail.movieDetail?.let { movieDetail ->
 					binding.backdropImage.loadImage(movieDetail.movie.backdropPath)
 					binding.body.posterImage.loadImage(movieDetail.movie.basicCategorisedMovie.posterPath)

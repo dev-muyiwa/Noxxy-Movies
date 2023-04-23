@@ -204,6 +204,7 @@ class NoxxyMovieRepository @Inject constructor(
 			val categorisedMovie = dao.getCategorisedMovieById(movieId)
 			val casts = dao.getCastsById(movieId)
 			val reviews = dao.getReviewsById(movieId)
+			val isBookmarked = dao.doesBookmarkedIdExist(movieId)
 			val movieDetail =
 				dao.getMovieDetails(movieId)?.toDomainModel(categorisedMovie, casts, reviews)
 			emit(Resource.Loading(movieDetail))
@@ -347,6 +348,8 @@ class NoxxyMovieRepository @Inject constructor(
 		return dao.getBookmarkedMovies()
 			.distinctUntilChanged()
 			.map { movies -> movies.map { it.toDomainModel() } }
+//
+//		return dao.getBookmarkedIds()
 	}
 
 	override suspend fun toggleBookmarkedMovie(id: Int): Boolean {

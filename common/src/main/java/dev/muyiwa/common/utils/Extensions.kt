@@ -8,6 +8,7 @@ import androidx.navigation.*
 import coil.*
 import coil.decode.*
 import dev.muyiwa.common.R
+import dev.muyiwa.common.presentation.*
 import dev.muyiwa.logging.*
 import kotlinx.coroutines.*
 import java.net.*
@@ -75,6 +76,17 @@ fun Boolean.toLayoutInt(): Int {
 /** This function returns the icon for a grid view if true else the icon for a list view. */
 fun Boolean.getIcon(): Int {
 	return if (this) R.drawable.ic_round_grid_view_24 else R.drawable.ic_round_view_list_24
+}
+
+fun Context.handleFailure(failure: Event<Throwable>?) {
+	val unhandledFailure = failure?.getContentIfNotHandled() ?: return
+	val message = "An error occurred, try again later!"
+	val toast = unhandledFailure.message ?: message
+	this.showToast(message, Toast.LENGTH_LONG)
+}
+
+fun Boolean?.setBookmarkIcon(): Int {
+	return if (this == true) R.drawable.ic_round_bookmark_remove_24 else R.drawable.ic_round_bookmark_add_24
 }
 
 fun String?.asUnknown(): String {

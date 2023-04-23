@@ -79,4 +79,20 @@ interface NoxxyMoviesDao {
 
 	@Query("SELECT * FROM ${CachedVideo.tableName} WHERE movieId = :id ORDER BY publishedAt DESC")
 	suspend fun getAllVideosBy(id: Int): List<CachedVideo>
+
+	@Query("SELECT * FROM ${CachedBookmarkedMovie.tableName} WHERE movieId = :id")
+	suspend fun doesBookmarkedIdExist(id: Int): Boolean
+
+	@Query("SELECT * FROM ${CachedBookmarkedMovie.tableName} ORDER BY movieId DESC")
+	suspend fun getBookmarkedIds(): List<CachedBookmarkedMovie>
+
+	fun getBookmarkedMovies(ids: List<CachedBookmarkedMovie>): Flow<List<CachedCategorisedMovie>> {
+		return flow { emit(ids.map { id -> getCategorisedMovieById(id.movieId) }) }
+	}
+
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	suspend fun addToBookmarks(id: CachedBookmarkedMovie)
+
+	@Delete
+	suspend fun deleteFromBookmarks(id: CachedBookmarkedMovie)
 }

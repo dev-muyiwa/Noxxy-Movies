@@ -4,7 +4,7 @@ sealed class GenreType(
     val name: String,
 ) {
     companion object {
-        fun fromApi(id: Int): String {
+        fun fromApi(id: Int?): String {
             return when (id) {
                 12 -> "Adventure"
                 14 -> "Fantasy"

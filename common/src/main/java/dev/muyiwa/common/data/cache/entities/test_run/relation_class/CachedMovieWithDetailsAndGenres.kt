@@ -9,13 +9,13 @@ import dev.muyiwa.common.data.cache.entities.test_run.genre.*
 import dev.muyiwa.common.data.cache.entities.test_run.movie.*
 import dev.muyiwa.common.data.cache.entities.test_run.review.*
 
-data class MovieWithDetailsAndGenres(
+data class CachedMovieWithDetailsAndGenres(
 	@Embedded val movie: CachedMovie,
 	@Relation(
 		parentColumn = "movieId",
 		entityColumn = "movieId",
 		entity = CachedDetail::class
-	) val detail: CachedDetail,
+	) val detail: CachedDetail?,
 	@Relation(
 		parentColumn = "movieId",
 		entityColumn = "genreId",
@@ -25,7 +25,7 @@ data class MovieWithDetailsAndGenres(
 		parentColumn = "movieId",
 		entityColumn = "movieId",
 		entity = CachedBookmark::class
-	) val bookmark: CachedBookmark,
+	) val bookmark: CachedBookmark?,
 	@Relation(
 		parentColumn = "movieId",
 		entity = CachedCast::class,

@@ -14,26 +14,40 @@ import javax.inject.*
 @InstallIn(SingletonComponent::class)
 abstract class CacheModule {
 
+	@Binds
+	abstract fun bindCache(cache: RoomCache): Cache
+
 	companion object {
 		@Provides
 		@Singleton
-		fun provideNoxxyDatabase(@ApplicationContext context: Context): NoxxyDatabase {
+		fun provideNoxxyDatabase(@ApplicationContext context: Context): NoxxyDb {
 			return Room.databaseBuilder(
 				context,
-				NoxxyDatabase::class.java,
+				NoxxyDb::class.java,
 				"noxxy.db"
 			).fallbackToDestructiveMigration()
 				.build()
 		}
 
 		@Provides
-		fun provideMoviesDao(
-			db: NoxxyDatabase
-		): NoxxyMoviesDao = db.getMoviesDao()
+		fun provideMovieDao(db: NoxxyDb): MovieDao = db.getMovieDao()
 
 		@Provides
-		fun provideBookmarksDao(
-			db: NoxxyDatabase
-		): BookmarksDao = db.getBookmarksDao()
+		fun provideBookmarksDao(db: NoxxyDb): BookmarksDao = db.getBookmarkDao()
+
+		@Provides
+		fun provideCastDao(db: NoxxyDb): CastDao = db.getCastDao()
+
+		@Provides
+		fun provideDetailDao(db: NoxxyDb): DetailDao = db.getDetailDao()
+
+		@Provides
+		fun provideGenreDao(db: NoxxyDb): GenreDao = db.getGenreDao()
+
+		@Provides
+		fun provideReviewDao(db: NoxxyDb): ReviewDao = db.getReviewDao()
+
+		@Provides
+		fun provideCategoryDao(db: NoxxyDb): CategoryDao = db.getCategoryDao()
 	}
 }

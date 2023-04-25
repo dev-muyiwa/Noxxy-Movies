@@ -13,7 +13,7 @@ import javax.inject.*
 
 @HiltViewModel
 class BookmarksViewModel @Inject constructor(
-	private val getBookmarkedMovies: GetBookmarkedMovies
+//	private val getBookmarkedMovies: GetBookmarkedMovies
 ) : ViewModel() {
 	private val _state = MutableStateFlow(BookmarksViewState())
 	val state get() = _state.asStateFlow()
@@ -26,11 +26,11 @@ class BookmarksViewModel @Inject constructor(
 		val message = "Unable to get bookmarked movies."
 		viewModelScope.launch(message.createExceptionHandler()) {
 			Logger.d("Getting bookmarked movies.")
-			getBookmarkedMovies()
-				.map { movies -> movies.map { it.toFullUiModel() } }
-				.filter { it.isNotEmpty() }
-				.catch { onFailure(it) }
-				.collect { onMoviesList(it) }
+//			getBookmarkedMovies()
+//				.map { movies -> movies.map { it.toFullUiModel() } }
+//				.filter { it.isNotEmpty() }
+//				.catch { onFailure(it) }
+//				.collect { onMoviesList(it) }
 		}
 
 //		viewModelScope.launch(message.createExceptionHandler())

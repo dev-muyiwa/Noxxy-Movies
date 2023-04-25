@@ -6,19 +6,19 @@ import dev.muyiwa.common.data.cache.entities.test_run.movie.*
 
 @Entity(
 	tableName = MovieCategoryCrossRef.tableName,
-	primaryKeys = ["movieId", "categoryId"],
+	primaryKeys = ["movieId", "categoryName"],
 	foreignKeys = [
 		ForeignKey(entity = CachedMovie::class,
 			parentColumns = ["movieId"],
 			childColumns = ["movieId"]),
 		ForeignKey(entity = CachedCategory::class,
-			parentColumns = ["categoryId"],
-			childColumns = ["categoryId"])
+			parentColumns = ["categoryName"],
+			childColumns = ["categoryName"])
 	]
 )
 data class MovieCategoryCrossRef(
 	val movieId: Int,
-	val categoryId: Int
+	val categoryName: String
 ) {
 	companion object {
 		const val tableName = "movie_category_cross_ref"

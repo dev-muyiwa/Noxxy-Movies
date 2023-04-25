@@ -1,6 +1,5 @@
 package dev.muyiwa.common.domain.repositories
 
-import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.model.category.*
 import dev.muyiwa.common.domain.model.detail.*
 import dev.muyiwa.common.domain.utils.*

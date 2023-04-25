@@ -2,7 +2,9 @@ package dev.muyiwa.search.presentation
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.*
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.model.category.*
+import dev.muyiwa.common.domain.model.category.Pagination
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.presentation.model.*
 import dev.muyiwa.common.utils.*
@@ -41,9 +43,9 @@ class SearchViewModel @Inject constructor(
 		val message = "Unable to search."
 		viewModelScope.launch(createExceptionHandler(message)) {
 			searchMovies(queryStateFlow)
-				.map { movies ->
-					movies.map { it.toCategorisedMovie().toFullUiModel() }
-				}
+//				.map { movies ->
+//					movies.map { it.toCategorisedMovie().toFullUiModel() }
+//				}
 				.catch { onFailure(it) }
 				.collect { onSearchResults(it) }
 		}
@@ -60,7 +62,7 @@ class SearchViewModel @Inject constructor(
 		}
 	}
 
-	private fun onSearchResults(result: List<UiCategorisedMovieComplete>) {
+	private fun onSearchResults(result: List<MovieWithGenres>) {
 		if (result.isEmpty()) {
 			onEmptyCacheResults(queryStateFlow.value)
 		} else {
@@ -104,7 +106,7 @@ class SearchViewModel @Inject constructor(
 		remoteSearchJob.invokeOnCompletion { it?.printStackTrace() }
 	}
 
-	private fun onPaginationInfoObtained(pagination: Pagination) {
+	private fun onPaginationInfoObtained(pagination: dev.muyiwa.common.domain.model.Pagination) {
 		Logger.i("Pagination info obtained.")
 		currentPage = pagination.currentPage
 		isLastPage = pagination.canLoadMore.not()
@@ -118,7 +120,7 @@ class SearchViewModel @Inject constructor(
 		_state.update { oldState -> oldState.updateToNoSearchQuery() }
 	}
 
-	private fun onMovieList(movies: List<UiCategorisedMovieComplete>) {
+	private fun onMovieList(movies: List<MovieWithGenres>) {
 		_state.update { oldState ->
 			oldState.updateToHasSearchResults(movies)
 		}

@@ -3,6 +3,7 @@ package dev.muyiwa.home.presentation.individual
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.*
 import dev.muyiwa.common.data.preferences.*
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.model.category.*
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.presentation.*
@@ -22,7 +23,7 @@ class CategorisedMoviesViewModel @Inject constructor(
 ) : ViewModel() {
 	private val _state = MutableStateFlow(CategorisedMoviesState())
 	private var currentPage = 1
-	val pageSize = Pagination.DEFAULT_PAGE_SIZE
+	val pageSize = dev.muyiwa.common.domain.model.Pagination.DEFAULT_PAGE_SIZE
 	var category = Category.POPULAR
 	val prefs = preferences
 	val state = _state.asStateFlow()
@@ -48,7 +49,7 @@ class CategorisedMoviesViewModel @Inject constructor(
 		viewModelScope.launch(exceptionHandler) {
 			getCategorisedMovies(category)
 				.onEach { if (hasNoMoviesStoredButCanLoadMore(it)) loadNextPageOfMovies() }
-				.map { movies -> movies.map { it.toFullUiModel() } }
+//				.map { movies -> movies.map { it.toFullUiModel() } }
 				.filter { it.isNotEmpty() }
 				.flowOn(Dispatchers.Default)
 				.catch { onFailed(it) }
@@ -56,11 +57,11 @@ class CategorisedMoviesViewModel @Inject constructor(
 		}
 	}
 
-	private fun hasNoMoviesStoredButCanLoadMore(movies: List<CategorisedMovie>): Boolean {
+	private fun hasNoMoviesStoredButCanLoadMore(movies: List<MovieWithGenres>): Boolean {
 		return movies.isEmpty() && ! state.value.noMoreMovies
 	}
 
-	private fun onNewMoviesList(movies: List<UiCategorisedMovieComplete>) {
+	private fun onNewMoviesList(movies: List<MovieWithGenres>) {
 		Logger.d("Got more movies.")
 		val updatedMoviesSet = (state.value.categorisedMovies + movies).toSet()
 		_state.update { oldState ->
@@ -78,7 +79,7 @@ class CategorisedMoviesViewModel @Inject constructor(
 		}
 	}
 
-	private fun onPaginationObtained(pagination: Pagination){
+	private fun onPaginationObtained(pagination: dev.muyiwa.common.domain.model.Pagination) {
 		currentPage = pagination.currentPage
 		isLastPage = pagination.canLoadMore.not()
 	}

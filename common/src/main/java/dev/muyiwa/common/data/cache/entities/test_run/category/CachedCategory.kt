@@ -5,8 +5,7 @@ import androidx.room.*
 @Entity(tableName = CachedCategory.tableName)
 /** Has a many-to-many relationship with the Movie table.*/
 data class CachedCategory(
-	@PrimaryKey val categoryId: Int,
-	val name: String
+	@PrimaryKey val categoryName: String
 ) {
 	companion object {
 		const val tableName = "category"

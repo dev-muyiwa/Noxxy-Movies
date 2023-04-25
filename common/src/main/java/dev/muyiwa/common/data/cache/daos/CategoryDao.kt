@@ -12,10 +12,13 @@ interface CategoryDao {
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	suspend fun insertMovieCategoryCrossRef(ref: MovieCategoryCrossRef)
 
+	@Upsert
+	suspend fun upsertMovieCategoryCrossRefs(refs: List<MovieCategoryCrossRef>)
+
 	@Query("SELECT ${CachedCategory.tableName}.* FROM ${CachedCategory.tableName} " +
 			"INNER JOIN ${MovieCategoryCrossRef.tableName} " +
-			"ON ${CachedCategory.tableName}.categoryId = ${MovieCategoryCrossRef.tableName}.categoryId " +
+			"ON ${CachedCategory.tableName}.categoryName = ${MovieCategoryCrossRef.tableName}.categoryName " +
 			"WHERE ${MovieCategoryCrossRef.tableName}.movieId = :movieId")
-	suspend fun getCategoriesByMovieId(movieId: Long): List<CachedCategory>
+	suspend fun getCategoriesBy(movieId: Int): List<CachedCategory>
 
 }

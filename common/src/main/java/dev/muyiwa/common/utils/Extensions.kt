@@ -8,6 +8,7 @@ import androidx.navigation.*
 import coil.*
 import coil.decode.*
 import dev.muyiwa.common.R
+import dev.muyiwa.common.data.api.utils.*
 import dev.muyiwa.common.presentation.*
 import dev.muyiwa.logging.*
 import kotlinx.coroutines.*
@@ -90,11 +91,20 @@ fun Boolean?.setBookmarkIcon(): Int {
 }
 
 fun String?.asUnknown(): String {
-	return this?.ifEmpty { "unknown" }.orEmpty()
+	return this ?: "unavailable"
+}
+
+/** This extension function checks if the path is empty before appending the image endpoint. */
+fun String?.formatUrl(endpoint: String): String {
+	return if (this !!.isEmpty()) {
+		this.asUnknown()
+	} else {
+		endpoint + this
+	}
 }
 
 /** This extension function displays a Toast to the screen. */
-fun Context.showToast(message: String, length: Int = Toast.LENGTH_SHORT){
+fun Context.showToast(message: String, length: Int = Toast.LENGTH_SHORT) {
 	Toast.makeText(this, message, length).show()
 }
 

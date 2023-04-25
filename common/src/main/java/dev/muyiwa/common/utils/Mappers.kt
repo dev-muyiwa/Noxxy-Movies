@@ -14,32 +14,32 @@ import dev.muyiwa.common.domain.model.detail.*
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.presentation.model.*
 
-fun ApiCategorisedMovieResponse.toDomainModel(category: Category): CategorisedPaginatedMovies {
-	return CategorisedPaginatedMovies(
-		movies = movies.orEmpty().map { it !!.toDomainModel(category) },
-		pagination = Pagination(
-			currentPage = currentPage ?: 0,
-			totalPages = totalPages ?: Pagination.UNKNOWN_TOTAL
-		)
-	)
-}
+//fun ApiCategorisedMovieResponse.toDomainModel(category: Category): CategorisedPaginatedMovies {
+//	return CategorisedPaginatedMovies(
+//		movies = movies.orEmpty().map { it !!.toDomainModel(category) },
+//		pagination = Pagination(
+//			currentPage = currentPage ?: 0,
+//			totalPages = totalPages ?: Pagination.UNKNOWN_TOTAL
+//		)
+//	)
+//}
 
-fun ApiSearchResponse.toDomainModel(): PaginatedMovies {
-	return PaginatedMovies(
-		movies = results.orEmpty().map { it!!.toMovie() },
-		pagination = Pagination(
-			currentPage = currentPage ?: 0,
-			totalPages = totalPages ?: Pagination.UNKNOWN_TOTAL
-		)
-	)
-}
+//fun ApiSearchResponse.toDomainModel(): PaginatedMovies {
+//	return PaginatedMovies(
+//		movies = results.orEmpty().map { it!!.toMovie() },
+//		pagination = Pagination(
+//			currentPage = currentPage ?: 0,
+//			totalPages = totalPages ?: Pagination.UNKNOWN_TOTAL
+//		)
+//	)
+//}
 
-fun ApiMovie.toDomainModel(category: Category): CategorisedMovie {
-	return CategorisedMovie(
-		movie = this.toMovie(),
-		category = category
-	)
-}
+//fun ApiMovie.toDomainModel(category: Category): CategorisedMovie {
+//	return CategorisedMovie(
+//		movie = this.toMovie(),
+//		category = category
+//	)
+//}
 
 fun ApiMovie.toMovie(): Movie {
 	return Movie(
@@ -61,12 +61,12 @@ fun ApiMovie.toMovie(): Movie {
 	)
 }
 
-fun CachedCategorisedMovie.toDomainModel(): CategorisedMovie {
-	return CategorisedMovie(
-		movie = this.toMovie(),
-		category = category
-	)
-}
+//fun CachedCategorisedMovie.toDomainModel(): CategorisedMovie {
+//	return CategorisedMovie(
+//		movie = this.toMovie(),
+//		category = category
+//	)
+//}
 
 fun Movie.toCategorisedMovie(): CategorisedMovie {
 	return CategorisedMovie(
@@ -75,25 +75,25 @@ fun Movie.toCategorisedMovie(): CategorisedMovie {
 	)
 }
 
-fun CachedCategorisedMovie.toMovie(): Movie {
-	return Movie(
-		isBookmarked = isBookmarked,
-		isAdult = isAdult,
-		backdropPath = backdropPath,
-		genreIds = genreIds,
-		movieId = movieId,
-		originalLanguage = originalLanguage,
-		originalTitle = originalTitle,
-		overview = overview,
-		popularity = popularity,
-		posterPath = posterPath,
-		releaseDate = releaseDate,
-		title = title,
-		video = video,
-		voteAverage = voteAverage,
-		voteCount = voteCount,
-	)
-}
+//fun CachedCategorisedMovie.toMovie(): Movie {
+//	return Movie(
+//		isBookmarked = isBookmarked,
+//		isAdult = isAdult,
+//		backdropPath = backdropPath,
+//		genreIds = genreIds,
+//		movieId = movieId,
+//		originalLanguage = originalLanguage,
+//		originalTitle = originalTitle,
+//		overview = overview,
+//		popularity = popularity,
+//		posterPath = posterPath,
+//		releaseDate = releaseDate,
+//		title = title,
+//		video = video,
+//		voteAverage = voteAverage,
+//		voteCount = voteCount,
+//	)
+//}
 
 fun ApiMovieDetails.toDomainModel(movie: CategorisedMovie): MovieDetail {
 	return MovieDetail(
@@ -147,83 +147,83 @@ fun ApiCast.toDomainModel(): Cast {
 		character = character.asUnknown()
 	)
 }
+//
+//fun Cast.toCachedModel(movieId: Int): CachedCast {
+//	return CachedCast(
+//		movieId = movieId,
+//		originalName = originalName,
+//		profilePath = profilePath,
+//		character = character
+//	)
+//}
 
-fun Cast.toCachedModel(movieId: Int): CachedCast {
-	return CachedCast(
-		movieId = movieId,
-		originalName = originalName,
-		profilePath = profilePath,
-		character = character
-	)
-}
+//fun CachedCast.toDomainModel(): Cast {
+//	return Cast(originalName, profilePath, character)
+//}
+//
+//fun Review.toCachedModel(movieId: Int): CachedReview {
+//	return CachedReview(movieId = movieId, author = author, content = comment)
+//}
+//
+//fun CachedReview.toDomainModel(): Review {
+//	return Review(author = author, comment = content)
+//}
 
-fun CachedCast.toDomainModel(): Cast {
-	return Cast(originalName, profilePath, character)
-}
+//fun ApiReview.toDomainModel(): Review {
+//	return Review(author = author.orEmpty(), comment = content.orEmpty())
+//}
 
-fun Review.toCachedModel(movieId: Int): CachedReview {
-	return CachedReview(movieId = movieId, author = author, content = comment)
-}
-
-fun CachedReview.toDomainModel(): Review {
-	return Review(author = author, comment = content)
-}
-
-fun ApiReview.toDomainModel(): Review {
-	return Review(author = author.orEmpty(), comment = content.orEmpty())
-}
-
-fun CachedMovieDetails.toDomainModel(
-	movie: CachedCategorisedMovie,
-	casts: List<CachedCast>,
-	reviews: List<CachedReview>
-): MovieDetail {
-	return MovieDetail(
-		movie = movie.toDomainModel(),
-		budget = budget,
-		homepage = homepage,
-		revenue = revenue,
-		runtime = runtime,
-		status = status,
-		tagline = tagline,
-		casts = casts.map { it.toDomainModel() },
-		reviews = reviews.map { it.toDomainModel() }
-	)
-}
-
-// Cache Mapping
-fun CategorisedMovie.toCacheModel(): CachedCategorisedMovie {
-	return CachedCategorisedMovie(
-		isBookmarked = movie.isBookmarked,
-		isAdult = movie.isAdult,
-		backdropPath = movie.backdropPath,
-		genreIds = movie.genreIds,
-		movieId = movie.movieId,
-		originalLanguage = movie.originalLanguage,
-		originalTitle = movie.originalTitle,
-		overview = movie.overview,
-		popularity = movie.popularity,
-		posterPath = movie.posterPath,
-		releaseDate = movie.releaseDate,
-		title = movie.title,
-		video = movie.video,
-		voteAverage = movie.voteAverage,
-		voteCount = movie.voteCount,
-		category = category
-	)
-}
-
-fun MovieDetail.toCacheModel(): CachedMovieDetails {
-	return CachedMovieDetails(
-		movieId = movie.movie.movieId,
-		budget = budget,
-		homepage = homepage,
-		revenue = revenue,
-		runtime = runtime,
-		status = status,
-		tagline = tagline
-	)
-}
+//fun CachedMovieDetails.toDomainModel(
+//	movie: CachedCategorisedMovie,
+//	casts: List<CachedCast>,
+//	reviews: List<CachedReview>
+//): MovieDetail {
+//	return MovieDetail(
+//		movie = movie.toDomainModel(),
+//		budget = budget,
+//		homepage = homepage,
+//		revenue = revenue,
+//		runtime = runtime,
+//		status = status,
+//		tagline = tagline,
+//		casts = casts.map { it.toDomainModel() },
+//		reviews = reviews.map { it.toDomainModel() }
+//	)
+//}
+//
+//// Cache Mapping
+//fun CategorisedMovie.toCacheModel(): CachedCategorisedMovie {
+//	return CachedCategorisedMovie(
+//		isBookmarked = movie.isBookmarked,
+//		isAdult = movie.isAdult,
+//		backdropPath = movie.backdropPath,
+//		genreIds = movie.genreIds,
+//		movieId = movie.movieId,
+//		originalLanguage = movie.originalLanguage,
+//		originalTitle = movie.originalTitle,
+//		overview = movie.overview,
+//		popularity = movie.popularity,
+//		posterPath = movie.posterPath,
+//		releaseDate = movie.releaseDate,
+//		title = movie.title,
+//		video = movie.video,
+//		voteAverage = movie.voteAverage,
+//		voteCount = movie.voteCount,
+//		category = category
+//	)
+//}
+//
+//fun MovieDetail.toCacheModel(): CachedMovieDetails {
+//	return CachedMovieDetails(
+//		movieId = movie.movie.movieId,
+//		budget = budget,
+//		homepage = homepage,
+//		revenue = revenue,
+//		runtime = runtime,
+//		status = status,
+//		tagline = tagline
+//	)
+//}
 
 
 // UI Mapping

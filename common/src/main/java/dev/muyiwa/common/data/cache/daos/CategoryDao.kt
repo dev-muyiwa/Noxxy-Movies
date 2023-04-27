@@ -7,7 +7,7 @@ import dev.muyiwa.common.data.cache.entities.test_run.cross_ref.*
 @Dao
 interface CategoryDao {
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insertCategory(category: CachedCategory): Int
+	suspend fun insertCategory(category: CachedCategory)
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	suspend fun insertMovieCategoryCrossRef(ref: MovieCategoryCrossRef)

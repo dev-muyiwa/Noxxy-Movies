@@ -20,7 +20,7 @@ data class CachedMovieWithDetailsAndGenres(
 		parentColumn = "movieId",
 		entityColumn = "genreId",
 		associateBy = Junction(MovieGenreCrossRef::class)
-	) val genres: List<CachedGenre>,
+	) val genres: List<CachedGenre>?,
 	@Relation(
 		parentColumn = "movieId",
 		entityColumn = "movieId",
@@ -31,11 +31,11 @@ data class CachedMovieWithDetailsAndGenres(
 		entity = CachedCast::class,
 		entityColumn = "movieId"
 	)
-	val casts: List<CachedCast>,
+	val casts: List<CachedCast>?,
 	@Relation(
 		parentColumn = "movieId",
 		entity = CacheReview::class,
 		entityColumn = "movieId"
 	)
-	val reviews: List<CacheReview>
+	val reviews: List<CacheReview>?
 )

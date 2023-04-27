@@ -15,7 +15,8 @@ data class CachedMovie(
 	val releaseDate: String,
 	val title: String,
 	val voteAverage: Double,
-	val voteCount: Int
+	val voteCount: Int,
+	val created_at: Long = System.currentTimeMillis()
 ) {
 	companion object {
 		const val tableName = "movie"

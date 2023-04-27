@@ -45,8 +45,8 @@ class MovieDetailViewModel @Inject constructor(
 	private fun toggleBookmarkedMovie() {
 		viewModelScope.launch(exceptionHandler) {
 			Logger.d("Movie bookmark toggled.")
-			_state.value.movieDetail?.movie?.let { it.movieId }
-				?.let { toggleBookmark(it) }
+//			_state.value.movieDetail?.movie?.let { it.movieId }
+//				?.let { toggleBookmark(it) }
 		}
 	}
 

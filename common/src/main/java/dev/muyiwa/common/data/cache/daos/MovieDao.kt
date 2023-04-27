@@ -21,7 +21,10 @@ interface MovieDao {
 
 	/** Returns the movie ID after a successful insert.*/
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insertMovie(movie: CachedMovie): Int
+	suspend fun insertMovie(movie: CachedMovie)
+
+//	@Insert(onConflict = OnConflictStrategy.REPLACE)
+//	suspend fun insertMovies(movies: List<CachedMovie>)
 
 	/**
 	 * This query joins the movie table with the movie_category_cross_ref table using
@@ -30,21 +33,37 @@ interface MovieDao {
 	To get the list of movies for multiple categories, you can call this function for each category
 	and merge the resulting lists.*/
 	@Transaction
+	@RewriteQueriesToDropUnusedColumns
 	@Query(
 		"SELECT ${CachedMovie.tableName}.*, ${CachedGenre.tableName}.* FROM ${CachedMovie.tableName} " +
 				"INNER JOIN ${MovieCategoryCrossRef.tableName} " +
-				"ON ${CachedMovie.tableName}.movieId = ${MovieCategoryCrossRef.tableName}movieId " +
+				"ON ${CachedMovie.tableName}.movieId = ${MovieCategoryCrossRef.tableName}.movieId " +
 				"INNER JOIN ${CachedCategory.tableName} " +
 				"ON ${CachedCategory.tableName}.categoryName = ${MovieCategoryCrossRef.tableName}.categoryName " +
 				"INNER JOIN ${MovieGenreCrossRef.tableName} " +
 				"ON ${CachedMovie.tableName}.movieId = ${MovieGenreCrossRef.tableName}.movieId " +
 				"INNER JOIN ${CachedGenre.tableName} " +
 				"ON ${CachedGenre.tableName}.genreId = ${MovieGenreCrossRef.tableName}.genreId " +
-				"WHERE ${MovieCategoryCrossRef.tableName}.categoryName = :categoryName"
+				"WHERE ${MovieCategoryCrossRef.tableName}.categoryName = :categoryName " +
+				"ORDER BY ${CachedMovie.tableName}.created_at ASC"
 	)
-	fun getMoviesBy(categoryName: String): Flow<List<CachedMovieWithGenres>>
+	fun getMoviesAsFlowBy(categoryName: String): Flow<List<CachedMovieWithGenres>>
 
 	@Transaction
+	@RewriteQueriesToDropUnusedColumns
+	@Query(
+		"SELECT ${CachedMovie.tableName}.*, ${CachedGenre.tableName}.* FROM ${CachedMovie.tableName} " +
+				"INNER JOIN ${MovieCategoryCrossRef.tableName} ON ${CachedMovie.tableName}.movieId = ${MovieCategoryCrossRef.tableName}.movieId " +
+				"INNER JOIN ${CachedCategory.tableName} ON ${CachedCategory.tableName}.categoryName = ${MovieCategoryCrossRef.tableName}.categoryName " +
+				"INNER JOIN ${MovieGenreCrossRef.tableName} ON ${CachedMovie.tableName}.movieId = ${MovieGenreCrossRef.tableName}.movieId " +
+				"INNER JOIN ${CachedGenre.tableName} ON ${CachedGenre.tableName}.genreId = ${MovieGenreCrossRef.tableName}.genreId " +
+				"WHERE ${MovieCategoryCrossRef.tableName}.categoryName = :categoryName " +
+				"ORDER BY ${CachedMovie.tableName}.created_at ASC LIMIT :count "
+	)
+	suspend fun getMoviesBy(categoryName: String, count: Int): List<CachedMovieWithGenres>
+
+	@Transaction
+	@RewriteQueriesToDropUnusedColumns
 	@Query(
 		"SELECT ${CachedMovie.tableName}.*, ${CachedGenre.tableName}.name AS name " +
 				"FROM ${CachedMovie.tableName} " +
@@ -54,7 +73,7 @@ interface MovieDao {
 				"ON ${MovieGenreCrossRef.tableName}.genreId = ${CachedGenre.tableName}.genreId " +
 				"INNER JOIN ${CachedBookmark.tableName} " +
 				"ON ${CachedMovie.tableName}.movieId = ${CachedBookmark.tableName}.movieId " +
-				"ORDER BY ${CachedMovie.tableName}.bookmarked_at DESC"
+				"ORDER BY ${CachedBookmark.tableName}.bookmarked_at DESC"
 	)
 	fun getBookmarkedMoviesWithGenres(): Flow<List<CachedMovieWithGenres>>
 
@@ -63,7 +82,8 @@ interface MovieDao {
 		    SELECT * FROM ${CachedMovie.tableName} 
 		    INNER JOIN ${MovieGenreCrossRef.tableName} ON ${CachedMovie.tableName}.movieId = movie_genre_cross_ref.movieId 
 		    INNER JOIN genre ON ${MovieGenreCrossRef.tableName}.genreId = ${CachedGenre.tableName}.genreId 
-		    WHERE ${CachedMovie.tableName}.title LIKE '%' || :query || '%' 
+		    WHERE ${CachedMovie.tableName}.title LIKE '%' || :query || '%'  
+			ORDER BY ${CachedMovie.tableName}.created_at ASC
 		"""
 	)
 	fun searchMoviesByTitleAndGenres(query: String): Flow<List<CachedMovieWithGenres>>
@@ -105,9 +125,4 @@ interface MovieDao {
 		genres: List<CachedGenre>,
 		categories: List<CachedCategory>
 	)
-
-	@Transaction
-	@Update
-	suspend fun updateMovieWithCategories(movieId: Int, categories: List<CachedCategory>)
-
 }

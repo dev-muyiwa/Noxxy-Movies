@@ -96,7 +96,7 @@ fun String?.asUnknown(): String {
 
 /** This extension function checks if the path is empty before appending the image endpoint. */
 fun String?.formatUrl(endpoint: String): String {
-	return if (this !!.isEmpty()) {
+	return if (this.isNullOrBlank()) {
 		this.asUnknown()
 	} else {
 		endpoint + this

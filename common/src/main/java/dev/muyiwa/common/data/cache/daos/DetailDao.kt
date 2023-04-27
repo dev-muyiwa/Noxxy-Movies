@@ -7,5 +7,5 @@ import dev.muyiwa.common.data.cache.entities.test_run.detail.*
 interface DetailDao {
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insertDetail(detail: CachedDetail): Int
+	suspend fun insertDetail(detail: CachedDetail)
 }

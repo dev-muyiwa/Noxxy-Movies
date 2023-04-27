@@ -2,18 +2,18 @@ package dev.muyiwa.home.presentation.all
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.*
-import dev.muyiwa.common.domain.model.category.*
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.utils.*
-import dev.muyiwa.common.presentation.*
 import dev.muyiwa.common.utils.*
 import dev.muyiwa.home.domain.usecases.*
+import dev.muyiwa.logging.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import javax.inject.*
 
 @HiltViewModel
 class HomeMoviesViewModel @Inject constructor(
-	private val getAllCategorisedMovies: GetAllCategorisedMovies
+	private val getAllCategoriesOfMovies: GetAllCategoriesOfMovies
 ) : ViewModel() {
 	private val _state = MutableStateFlow(HomeMoviesState())
 	val state = _state.asStateFlow()
@@ -37,51 +37,34 @@ class HomeMoviesViewModel @Inject constructor(
 
 	private fun subscribeToAllMoviesUpdate() {
 		viewModelScope.launch(exceptionHandler) {
-			getAllCategorisedMovies().onEach { resource ->
-				when (resource) {
-					is Resource.Loading -> onLoading(resource)
-					is Resource.Success -> onSuccess(resource)
-					is Resource.Error -> onFailure(resource)
-				}
-			}.launchIn(this)
+			getAllCategoriesOfMovies()
+				.filter { it.isNotEmpty() }
+				.catch { onFailed(it) }
+				.flowOn(Dispatchers.Main)
+				.onCompletion { _state.update { it.updateToHasCompletedLoading() } }
+				.collect { onNewMoviePair(it) }
 		}
 	}
 
-	private fun onLoading(resource: Resource.Loading<List<List<CategorisedMovie>>>) {
-		_state.update { oldState ->
-			oldState.copy(
-				isLoading = true,
-				allMovies = resource.data.orEmpty().map { it.map { movie -> movie.toUiModel() } }
-			)
-		}
-	}
-
-	private fun onSuccess(resource: Resource.Success<List<List<CategorisedMovie>>>) {
-		_state.update { oldState ->
-			oldState.copy(
-				isLoading = false,
-				allMovies = resource.data.orEmpty().map { it.map { movie -> movie.toUiModel() } }
-			)
-		}
-	}
-
-	private fun onFailure(resource: Resource.Error<List<List<CategorisedMovie>>>) {
-		_state.update { oldState ->
-			oldState.copy(
-				isLoading = false,
-				allMovies = resource.data.orEmpty().map { it.map { movie -> movie.toUiModel() } },
-				failure = Event(Throwable(resource.message))
-			)
+	private fun onNewMoviePair(moviePairs: List<Pair<Category, List<MovieWithGenres>>>) {
+		moviePairs.onEach { item ->
+			when (item.first) {
+				Category.POPULAR -> _state.update { it.updateToHasPopularMovies(item.second) }
+				Category.UPCOMING -> _state.update { it.updateToHasUpcomingMovies(item.second) }
+				Category.TOP_RATED -> _state.update { it.updateToHasTopRatedMovies(item.second) }
+				Category.NOW_PLAYING -> _state.update { it.updateToHasNowPlayingMovies(item.second) }
+			}
+//			Logger.i("Got ${item.first.title} movies => ${item.second}")
 		}
 	}
 
 	private fun onFailed(failure: Throwable) {
-		when (failure) {
-			is NetworkUnavailableException -> {
-				_state.update { oldState ->
-					oldState.copy(isLoading = false, failure = Event(failure))
-				}
-			}
+//		when (failure) {
+//			is NetworkUnavailableException -> {
+		_state.update { oldState ->
+			oldState.updateToHasFailures(failure)
 		}
+//			}
+//		}
 	}
 }

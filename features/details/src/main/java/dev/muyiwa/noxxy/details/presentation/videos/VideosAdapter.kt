@@ -5,7 +5,7 @@ import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.*
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.*
-import dev.muyiwa.common.domain.model.detail.*
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.noxxy.details.databinding.*
 
 internal class VideosAdapter(private val lifecycle: Lifecycle) :

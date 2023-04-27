@@ -5,6 +5,7 @@ import dev.muyiwa.common.data.api.model.categorised_movie.*
 import dev.muyiwa.common.data.api.model.details.*
 import dev.muyiwa.common.data.api.model.reviews.*
 import dev.muyiwa.common.data.api.model.search.*
+import dev.muyiwa.common.data.api.model.videos.*
 import dev.muyiwa.common.data.api.utils.*
 import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.utils.*
@@ -84,5 +85,19 @@ fun ApiCast.toDomainModel(): Cast {
 
 fun ApiCasts.toDomainModel(): List<Cast> {
 	return cast.map { it.toDomainModel() }
+}
+
+fun ApiVideo.toDomainModel(): Video {
+	return Video(
+		name = name.asUnknown(),
+		videoKey = key ?: throw MappingException("Video Key cannot be null."),
+		type = type.asUnknown(),
+		publishedAt = publishedAt.asUnknown(),
+		videoId = id.asUnknown()
+	)
+}
+
+fun List<ApiVideo?>?.toDomainModel(): List<Video> {
+	return this.orEmpty().map { it!!.toDomainModel() }
 }
 

@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetCategorisedMovies @Inject constructor(
 	private val repository: AppRepository
 ) {
-	operator fun invoke(category: Category) = repository.getCategorisedMovies(category)
+	operator fun invoke(category: Category) = repository.getCategorisedMoviesAsFlow(category)
 }

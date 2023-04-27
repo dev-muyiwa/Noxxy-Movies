@@ -3,6 +3,7 @@ package dev.muyiwa.bookmarks.presentation
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.*
 import dev.muyiwa.bookmarks.domain.usecases.*
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.presentation.*
 import dev.muyiwa.common.presentation.model.*
 import dev.muyiwa.common.utils.*
@@ -37,7 +38,7 @@ class BookmarksViewModel @Inject constructor(
 
 	}
 
-	private fun onMoviesList(movies: List<UiCategorisedMovieComplete>) {
+	private fun onMoviesList(movies: List<MovieWithGenres>) {
 		_state.update { oldState ->
 			oldState.copy(bookmarkedMovies = movies)
 		}

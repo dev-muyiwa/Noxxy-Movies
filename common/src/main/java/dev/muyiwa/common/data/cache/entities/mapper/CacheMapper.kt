@@ -52,9 +52,9 @@ fun CachedMovieWithDetailsAndGenres.toDomainModel(): MovieWithFullDetail {
 	return MovieWithFullDetail(
 		movie = movie.toDomainModel(),
 		detail = detail !!.toDomainModel(),
-		genres = genres.map { it.toDomainModel() },
-		casts = casts.map { it.toDomainModel() },
-		reviews = reviews.map { it.toDomainModel() },
+		genres = genres!!.map { it.toDomainModel() },
+		casts = casts!!.map { it.toDomainModel() },
+		reviews = reviews!!.map { it.toDomainModel() },
 		isBookmarked = bookmark != null
 	)
 }

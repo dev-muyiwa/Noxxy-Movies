@@ -6,8 +6,8 @@ import dev.muyiwa.common.data.cache.entities.test_run.bookmark.*
 
 @Dao
 interface BookmarksDao {
-	@Query("SELECT * FROM ${CachedBookmarkedMovie.tableName} WHERE movieId = :movieId")
-	suspend fun getBookmarkBy(movieId: Int): CachedBookmark
+//	@Query("SELECT * FROM ${CachedBookmarkedMovie.tableName} WHERE movieId = :movieId")
+//	suspend fun getBookmarkBy(movieId: Int): CachedBookmark
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	suspend fun addToBookmark(bookmark: CachedBookmark)

@@ -1,11 +1,12 @@
 package dev.muyiwa.search.presentation
 
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.presentation.*
 import dev.muyiwa.common.presentation.model.*
 
 data class SearchViewState(
 	val noSearchQuery: Boolean = true,
-	val searchResults: List<UiCategorisedMovieComplete> = emptyList(),
+	val searchResults: List<MovieWithGenres> = emptyList(),
 	val searchingRemotely: Boolean = false,
 	val noRemoteResults: Boolean = false,
 	val failure: Event<Throwable>? = null
@@ -32,7 +33,7 @@ data class SearchViewState(
 		)
 	}
 
-	fun updateToHasSearchResults(movies: List<UiCategorisedMovieComplete>): SearchViewState {
+	fun updateToHasSearchResults(movies: List<MovieWithGenres>): SearchViewState {
 		return copy(
 			noSearchQuery = false,
 			searchResults = (searchResults + movies).toSet().toList(),

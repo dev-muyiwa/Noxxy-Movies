@@ -1,5 +1,6 @@
 package dev.muyiwa.search.domain.usecases
 
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.model.category.*
 import dev.muyiwa.common.domain.repositories.*
 import kotlinx.coroutines.*
@@ -7,9 +8,9 @@ import kotlinx.coroutines.flow.*
 import javax.inject.*
 import kotlin.time.Duration.Companion.milliseconds
 
-class SearchMovies @Inject constructor(private val repository: MovieRepository) {
+class SearchMovies @Inject constructor(private val repository: AppRepository) {
 	@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-	operator fun invoke(queryFlow: Flow<String>): Flow<List<Movie>> = queryFlow
+	operator fun invoke(queryFlow: Flow<String>): Flow<List<MovieWithGenres>> = queryFlow
 		.debounce(500.milliseconds)
 		.filter { it.length >= 2 }
 		.distinctUntilChanged()

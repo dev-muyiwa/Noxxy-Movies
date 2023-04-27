@@ -1,26 +1,27 @@
 package dev.muyiwa.search.domain.usecases
 
-import dev.muyiwa.common.domain.model.category.*
 import dev.muyiwa.common.domain.repositories.*
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.utils.*
-import dev.muyiwa.logging.*
 import kotlinx.coroutines.*
 import javax.inject.*
 
 class SearchMoviesRemotely @Inject constructor(
-	private val repository: MovieRepository,
+	private val repository: AppRepository,
 	private val dispatchersProvider: DispatchersProvider
 ) {
-	suspend operator fun invoke(pageToLoad: Int, query: String): Pagination {
+	suspend operator fun invoke(
+		pageToLoad: Int,
+		query: String
+	): dev.muyiwa.common.domain.model.Pagination {
 		return withContext(dispatchersProvider.io()) {
-			val (movies, pagination) = repository
+			val (moviesWithGenres, pagination) = repository
 				.searchMoviesRemotely(query, pageToLoad)
-			Logger.i("Search Query is $query\n movies = $movies")
-			if (movies.isEmpty()) {
-				throw NoMoreMoviesException("Unable to get movies like $query")
+//			Logger.i("Search Query is $query\n moviesWithGenres = $moviesWithGenres")
+			if (moviesWithGenres.isEmpty()) {
+				throw NoMoreMoviesException("Unable to get moviesWithGenres like $query")
 			}
-			repository.storeCategorisedMovies(movies.map { it.toCategorisedMovie() })
+			repository.storeCategorisedMovies(movies = moviesWithGenres)
 			return@withContext pagination
 		}
 	}

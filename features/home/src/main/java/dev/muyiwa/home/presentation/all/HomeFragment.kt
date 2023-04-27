@@ -31,15 +31,15 @@ class HomeFragment : Fragment(), ItemClickListener {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		binding?.homeRv?.isNestedScrollingEnabled = false
+		val allMoviesAdapter = AllMoviesAdapter(requireContext(), this@HomeFragment)
+		binding?.homeRv?.apply {
+			layoutManager =
+				LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+			hasFixedSize()
+			adapter = allMoviesAdapter
+		}
 		lifecycleScope.launch {
 			viewModel.state.collect {
-				val allMoviesAdapter = AllMoviesAdapter(requireContext(), this@HomeFragment)
-				binding?.homeRv?.apply {
-					layoutManager =
-						LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-					hasFixedSize()
-					adapter = allMoviesAdapter
-				}
 				allMoviesAdapter.setData(it.allMovies)
 				handleFailure(it.failure)
 			}

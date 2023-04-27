@@ -4,6 +4,7 @@ import android.content.*
 import android.view.*
 import androidx.navigation.*
 import androidx.recyclerview.widget.*
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.presentation.model.*
 import dev.muyiwa.common.utils.*
@@ -12,33 +13,32 @@ import dev.muyiwa.logging.*
 
 class AllMoviesAdapter(private val context: Context, private val listener: ItemClickListener) :
 	RecyclerView.Adapter<AllMoviesAdapter.AllMoviesViewHolder>() {
-	private var listOfMovies: List<List<UiCategorisedMovie>> = emptyList()
+	private var listOfMovies: List<Pair<Category, List<MovieWithGenres>>> = emptyList()
 
-	fun setData(list: List<List<UiCategorisedMovie>>) {
+	fun setData(list: List<Pair<Category, List<MovieWithGenres>>>) {
 		listOfMovies = list
 		notifyDataSetChanged()
 	}
 
 	inner class AllMoviesViewHolder(private val binding: LayoutHomeRvBinding) :
 		RecyclerView.ViewHolder(binding.root) {
-		fun bindItems(movies: List<UiCategorisedMovie>) {
-			if (movies.isEmpty()) {
+		fun bindItems(moviePairs: Pair<Category, List<MovieWithGenres>>) {
+			if (moviePairs.second.isEmpty()) {
 				return
 			}
-			val sample = movies[0]
-			binding.heading.text = sample.category?.let{ it.title }
+			binding.heading.text = moviePairs.first.title
 			binding.btnSeeMore.setOnClickListener {
-				sample.category?.let { listener.navigateToMoreMovies(it)}
+				listener.navigateToMoreMovies(moviePairs.first)
 			}
-//			val snapHelper = LinearSnapHelper()
+			val snapHelper = StartSnapHelper()
 			val categorisedMovieAdapter = CategorisedMoviesAdapter(listener)
 			binding.categorisedRv.apply {
 				layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 				hasFixedSize()
 				adapter = categorisedMovieAdapter
 			}
+			categorisedMovieAdapter.submitList(moviePairs.second)
 //			snapHelper.attachToRecyclerView(binding.categorisedRv)
-			categorisedMovieAdapter.submitList(movies)
 		}
 
 	}

@@ -2,15 +2,17 @@ package dev.muyiwa.common.data.cache.daos
 
 import androidx.room.*
 import dev.muyiwa.common.data.cache.entities.*
+import dev.muyiwa.common.data.cache.entities.test_run.bookmark.*
 
 @Dao
 interface BookmarksDao {
-	@Query("SELECT * FROM ${CachedBookmarkedMovie.tableName} WHERE movieId = :id")
-	suspend fun getBookmarkedMovieId(id: Int): Int
+//	@Query("SELECT * FROM ${CachedBookmarkedMovie.tableName} WHERE movieId = :movieId")
+//	suspend fun getBookmarkBy(movieId: Int): CachedBookmark
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	suspend fun addMovieIdToBookmarks(id: CachedBookmarkedMovie)
+	suspend fun addToBookmark(bookmark: CachedBookmark)
 
-	@Query("DELETE FROM ${CachedBookmarkedMovie.tableName} WHERE movieId = :id")
-	suspend fun removeMovieIdFromBookmarks(id: Int)
+	@Delete
+	suspend fun deleteFromBookmark(bookmark: CachedBookmark)
+
 }

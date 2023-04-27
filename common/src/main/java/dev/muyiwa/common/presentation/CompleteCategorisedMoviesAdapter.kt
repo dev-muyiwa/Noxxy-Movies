@@ -4,15 +4,14 @@ import android.content.*
 import android.view.*
 import androidx.recyclerview.widget.*
 import dev.muyiwa.common.databinding.*
-import dev.muyiwa.common.presentation.model.*
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.utils.*
-import kotlin.properties.*
 
 class CompleteCategorisedMoviesAdapter(
 	private val context: Context,
 	private val listener: ItemClickListener
 ) :
-	ListAdapter<UiCategorisedMovieComplete, RecyclerView.ViewHolder>(
+	ListAdapter<MovieWithGenres, RecyclerView.ViewHolder>(
 		ITEM_COMPARATOR
 	) {
 	private var item_view  = 0
@@ -27,42 +26,42 @@ class CompleteCategorisedMoviesAdapter(
 	inner class LinearMoviesViewHolder(
 		private val binding: LayoutCategorisedItemCompleteBinding
 	) : RecyclerView.ViewHolder(binding.root) {
-		fun bind(item: UiCategorisedMovieComplete) {
-			binding.title.text = item.basicCategorisedMovie.title
-			binding.poster.loadImage(item.basicCategorisedMovie.posterPath)
-			"${item.basicCategorisedMovie.voteAverage}/10 IMDb".also {
+		fun bind(item: MovieWithGenres) {
+			binding.title.text = item.movie.title
+			binding.poster.loadImage(item.movie.posterPath)
+			"${item.movie.voteAverage}/10 IMDb".also {
 				binding.averageVote.text = it
 			}
-			binding.overview.text = item.overview
+			binding.overview.text = item.movie.overview
 			setupGenreRv(item)
 		}
 
-		fun handleClicks(item: UiCategorisedMovieComplete) {
+		fun handleClicks(item: MovieWithGenres) {
 			binding.recyclerViewItemContainer.setOnClickListener {
-				listener.navigateToDetails(it, item.basicCategorisedMovie.movieId)
+				listener.navigateToDetails(it, item.movie.movieId)
 			}
 		}
 
-		private fun setupGenreRv(item: UiCategorisedMovieComplete) {
+		private fun setupGenreRv(item: MovieWithGenres) {
 			val genreAdapter = GenreAdapter()
 			binding.genreRv.apply {
 				layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 				hasFixedSize()
 				adapter = genreAdapter
 			}
-			genreAdapter.submitList(item.genreIds)
+			genreAdapter.submitList(item.genres)
 		}
 	}
 
 	inner class GridMoviesViewHolder(
 		private val binding: LayoutCategoryItemGridBinding
 	): RecyclerView.ViewHolder(binding.root) {
-		fun bind(item: UiCategorisedMovieComplete) {
-			binding.title.text = item.basicCategorisedMovie.title
-			binding.poster.loadImage(item.basicCategorisedMovie.posterPath)
-			"${item.basicCategorisedMovie.voteAverage}/10 IMDb".also { binding.averageVote.text = it }
+		fun bind(item: MovieWithGenres) {
+			binding.title.text = item.movie.title
+			binding.poster.loadImage(item.movie.posterPath)
+			"${item.movie.voteAverage}/10 IMDb".also { binding.averageVote.text = it }
 			binding.recyclerViewItemContainer.setOnClickListener {
-				listener.navigateToDetails(it, item.basicCategorisedMovie.movieId)
+				listener.navigateToDetails(it, item.movie.movieId)
 			}
 		}
 	}
@@ -98,7 +97,7 @@ class CompleteCategorisedMoviesAdapter(
 	}
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-		val movie: UiCategorisedMovieComplete = getItem(position)
+		val movie: MovieWithGenres = getItem(position)
 		if (holder is LinearMoviesViewHolder) {
 			holder.bind(movie)
 			holder.handleClicks(movie)
@@ -108,17 +107,17 @@ class CompleteCategorisedMoviesAdapter(
 	}
 }
 
-private val ITEM_COMPARATOR = object : DiffUtil.ItemCallback<UiCategorisedMovieComplete>() {
+private val ITEM_COMPARATOR = object : DiffUtil.ItemCallback<MovieWithGenres>() {
 	override fun areItemsTheSame(
-		oldItem: UiCategorisedMovieComplete,
-		newItem: UiCategorisedMovieComplete
+		oldItem: MovieWithGenres,
+		newItem: MovieWithGenres
 	): Boolean {
-		return oldItem.basicCategorisedMovie.movieId == newItem.basicCategorisedMovie.movieId
+		return oldItem.movie == newItem.movie
 	}
 
 	override fun areContentsTheSame(
-		oldItem: UiCategorisedMovieComplete,
-		newItem: UiCategorisedMovieComplete
+		oldItem: MovieWithGenres,
+		newItem: MovieWithGenres
 	): Boolean {
 		return oldItem == newItem
 	}

@@ -19,11 +19,11 @@ import kotlinx.coroutines.*
 abstract class ActivityRetainedModule {
 	@Binds
 	@ActivityRetainedScoped
-	abstract fun bindMovieRepository(repository: NoxxyMovieRepository): MovieRepository
+	abstract fun bindMovieRepository(repository: NoxxyAppRepository): AppRepository
 
-	@Binds
-//	@ActivityRetainedScoped
-	abstract fun bindBookmarkRepository(repository: NoxxyBookmarkRepository): BookmarkRepository
+//	@Binds
+////	@ActivityRetainedScoped
+//	abstract fun bindBookmarkRepository(repository: NoxxyBookmarkRepository): BookmarkRepository
 
 	@Binds
 	abstract fun bindDispatchersProvider(dispatcherProvider: CoroutineDispatchersProvider): DispatchersProvider

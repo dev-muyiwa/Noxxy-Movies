@@ -17,13 +17,13 @@ class NoxxyBookmarkRepository @Inject constructor(
 
 	override fun addMovieIdToBookmarks(movieId: Int) {
 		CoroutineScope(dispatchersProvider.io()).launch {
-			dao.addMovieIdToBookmarks(CachedBookmarkedMovie(movieId))
+//			dao.addMovieIdToBookmarks(CachedBookmarkedMovie(movieId))
 		}
 	}
 
 	override fun removeMovieIdFromBookmarks(movieId: Int) {
 		CoroutineScope(dispatchersProvider.io()).launch {
-			dao.removeMovieIdFromBookmarks(movieId)
+//			dao.removeMovieIdFromBookmarks(movieId)
 		}
 	}
 }

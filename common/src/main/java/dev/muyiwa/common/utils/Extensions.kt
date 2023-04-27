@@ -8,6 +8,8 @@ import androidx.navigation.*
 import coil.*
 import coil.decode.*
 import dev.muyiwa.common.R
+import dev.muyiwa.common.data.api.utils.*
+import dev.muyiwa.common.presentation.*
 import dev.muyiwa.logging.*
 import kotlinx.coroutines.*
 import java.net.*
@@ -77,12 +79,32 @@ fun Boolean.getIcon(): Int {
 	return if (this) R.drawable.ic_round_grid_view_24 else R.drawable.ic_round_view_list_24
 }
 
+fun Context.handleFailure(failure: Event<Throwable>?) {
+	val unhandledFailure = failure?.getContentIfNotHandled() ?: return
+	val message = "An error occurred, try again later!"
+	val toast = unhandledFailure.message ?: message
+	this.showToast(message, Toast.LENGTH_LONG)
+}
+
+fun Boolean?.setBookmarkIcon(): Int {
+	return if (this == true) R.drawable.ic_round_bookmark_remove_24 else R.drawable.ic_round_bookmark_add_24
+}
+
 fun String?.asUnknown(): String {
-	return this?.ifEmpty { "unknown" }.orEmpty()
+	return this ?: "unavailable"
+}
+
+/** This extension function checks if the path is empty before appending the image endpoint. */
+fun String?.formatUrl(endpoint: String): String {
+	return if (this.isNullOrBlank()) {
+		this.asUnknown()
+	} else {
+		endpoint + this
+	}
 }
 
 /** This extension function displays a Toast to the screen. */
-fun Context.showToast(message: String, length: Int = Toast.LENGTH_SHORT){
+fun Context.showToast(message: String, length: Int = Toast.LENGTH_SHORT) {
 	Toast.makeText(this, message, length).show()
 }
 

@@ -37,7 +37,6 @@ class VideosFragment : Fragment(R.layout.fragment_videos) {
 		}
 		lifecycleScope.launch {
 			viewModel.state.collect{
-//				binding.videoText.text = it.toString()
 				videosAdapter.submitList(it.videos)
 				handleFailure(it.failure)
 			}

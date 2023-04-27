@@ -1,4 +1,4 @@
-package dev.muyiwa.common.domain.model.detail
+package dev.muyiwa.common.domain.model
 
 data class Video(
 	val name: String,

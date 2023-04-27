@@ -30,6 +30,8 @@ class BookmarksFragment : Fragment(R.layout.fragment_bookmarks), ItemClickListen
 		lifecycleScope.launch {
 			viewModel.state.collect {
 				bookmarksAdapter.submitList(it.bookmarkedMovies)
+				binding.testText.text = it.toString()
+//				requireContext().showToast("${it}")
 				handleFailure(it.failure)
 			}
 		}

@@ -1,6 +1,6 @@
 package dev.muyiwa.noxxy.details.presentation.videos
 
-import dev.muyiwa.common.domain.model.detail.*
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.presentation.*
 
 data class MovieVideoState(

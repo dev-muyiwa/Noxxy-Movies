@@ -3,6 +3,7 @@ package dev.muyiwa.noxxy.details.presentation
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.*
 import dev.muyiwa.common.data.api.utils.*
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.model.detail.*
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.presentation.*
@@ -44,50 +45,52 @@ class MovieDetailViewModel @Inject constructor(
 	private fun toggleBookmarkedMovie() {
 		viewModelScope.launch(exceptionHandler) {
 			Logger.d("Movie bookmark toggled.")
-			_state.value.movieDetail?.movie?.basicCategorisedMovie?.let { it.movieId }
-				?.let { toggleBookmark(it) }
+//			_state.value.movieDetail?.movie?.let { it.movieId }
+//				?.let { toggleBookmark(it) }
 		}
 	}
 
 	private fun getDetailsOfMovie(id: Int) {
 		viewModelScope.launch(exceptionHandler) {
-			getMovieDetail(id).onEach { resource ->
-				when (resource) {
-					is Resource.Loading -> onLoading(resource)
-					is Resource.Success -> onSuccess(resource)
-					is Resource.Error -> onFailure(resource)
-				}
-			}.launchIn(this)
+			val detail = getMovieDetail(id)
+			onDetails(detail)
 		}
 	}
 
-	private fun onLoading(resource: Resource.Loading<MovieDetail>) {
+	private fun onDetails(detail: MovieWithFullDetail) {
+		Logger.d("Got more movies.")
 		_state.update { oldState ->
-			oldState.copy(
-				isLoading = true,
-				movieDetail = resource.data?.toUiModel()
-			)
+			oldState.copy(isLoading = false, movieDetail = detail)
 		}
 	}
-
-	private fun onSuccess(resource: Resource.Success<MovieDetail>) {
-		_state.update { oldState ->
-			oldState.copy(
-				isLoading = false,
-				movieDetail = resource.data?.toUiModel()
-			)
-		}
-	}
-
-	private fun onFailure(resource: Resource.Error<MovieDetail>) {
-		_state.update { oldState ->
-			oldState.copy(
-				isLoading = false,
-				movieDetail = resource.data?.toUiModel(),
-				failure = Event(Throwable(resource.message))
-			)
-		}
-	}
+//
+//	private fun onLoading(resource: Resource.Loading<MovieDetail>) {
+//		_state.update { oldState ->
+//			oldState.copy(
+//				isLoading = true,
+//				movieDetail = resource.data?.toUiModel()
+//			)
+//		}
+//	}
+//
+//	private fun onSuccess(resource: Resource.Success<MovieDetail>) {
+//		_state.update { oldState ->
+//			oldState.copy(
+//				isLoading = false,
+//				movieDetail = resource.data?.toUiModel()
+//			)
+//		}
+//	}
+//
+//	private fun onFailure(resource: Resource.Error<MovieDetail>) {
+//		_state.update { oldState ->
+//			oldState.copy(
+//				isLoading = false,
+//				movieDetail = resource.data?.toUiModel(),
+//				failure = Event(Throwable(resource.message))
+//			)
+//		}
+//	}
 
 	private fun onFailed(failure: Throwable) {
 		when (failure) {

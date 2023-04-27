@@ -17,7 +17,6 @@ import dev.muyiwa.common.utils.*
 import dev.muyiwa.noxxy.details.R
 import dev.muyiwa.noxxy.details.databinding.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 import dev.muyiwa.common.R as commonR
 
 @AndroidEntryPoint
@@ -28,15 +27,6 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 		super.onViewCreated(view, savedInstanceState)
 		val binding = FragmentMovieDetailsBinding.bind(view)
 		var isBookmarked = false
-		binding.appbarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-//			var margin = - (verticalOffset * 2)
-//			margin = max(margin, 0)
-//			margin = min(margin, binding.toolbar.height)
-//			val params =
-//				binding.collapsingToolbarLayout.layoutParams as CollapsingToolbarLayout.LayoutParams
-//			params.setMargins(0, 0, 0, margin)
-//			binding.collapsingToolbarLayout.layoutParams = params
-		}
 		binding.toolbar.apply {
 			setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
 			setNavigationIconTint(resources.getColor(R.color.toolbar_color))
@@ -104,26 +94,28 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
 		lifecycleScope.launch {
 			viewModel.state.collect { detail ->
-				val isBookmarked =
-					detail.movieDetail?.movie?.basicCategorisedMovie?.let { it.isBookmarked }
+				val isMovieBookmarked =
+					detail.movieDetail?.isBookmarked
+				isMovieBookmarked?.setBookmarkIcon()
+					?.let { binding.toolbar.menu.findItem(R.id.bookmark_icon).setIcon(it) }
 				detail.movieDetail?.let { movieDetail ->
 					binding.backdropImage.loadImage(movieDetail.movie.backdropPath)
-					binding.body.posterImage.loadImage(movieDetail.movie.basicCategorisedMovie.posterPath)
-					"${movieDetail.movie.basicCategorisedMovie.title} (${
+					binding.body.posterImage.loadImage(movieDetail.movie.posterPath)
+					"${movieDetail.movie.title} (${
 						movieDetail.movie.releaseDate.split("-")[0]
 					})".also { binding.body.movieTitle.text = it }
 					binding.body.movieRating.rating =
-						movieDetail.movie.basicCategorisedMovie.voteAverage.div(2).toFloat()
+						movieDetail.movie.voteAverage.div(2).toFloat()
 					binding.body.ratingText.text =
-						"${movieDetail.movie.basicCategorisedMovie.voteAverage}"
-					binding.body.runtime.text = "Runtime: " + movieDetail.runtime
+						"${movieDetail.movie.voteAverage}"
+					binding.body.runtime.text = "Runtime: " + movieDetail.detail.runtime
 //					genreAdapter.submitList(movieDetail.movie.genreIds)
-					movieDetail.movie.genreIds.distinct().forEach { genre ->
+					movieDetail.genres.distinct().forEach { genre ->
 						val chip = Chip(requireContext())
 						val chipShapeAppearance = chip.shapeAppearanceModel.toBuilder()
 							.setAllCorners(CornerFamily.ROUNDED, 12f) // set corner radius in dp
 							.build()
-						chip.text = genre
+						chip.text = genre.name
 						chip.setChipBackgroundColorResource(commonR.color.genre_bg_color)
 						chip.setTextColor(
 							ContextCompat.getColor(
@@ -136,7 +128,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 						chip.isCheckable = false
 						chip.shapeAppearanceModel = chipShapeAppearance
 						if (chipGroup.contains(chip).not()) {
-							chipGroup.addView(chip, movieDetail.movie.genreIds.indexOf(chip.text))
+							chipGroup.addView(chip, movieDetail.genres.map { it.name }.indexOf(chip.text))
 						}
 					}
 //					chipGroup.children.toSet()

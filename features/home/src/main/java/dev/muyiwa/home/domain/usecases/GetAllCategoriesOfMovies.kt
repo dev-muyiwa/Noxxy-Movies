@@ -9,5 +9,5 @@ import javax.inject.*
 class GetAllCategoriesOfMovies @Inject constructor(private val repository: AppRepository) {
 	operator fun invoke(): Flow<List<Pair<Category, List<MovieWithGenres>>>> =
 		repository.getAllCategoriesOfMovies()
-			.distinctUntilChanged()
+//			.distinctUntilChanged()
 }

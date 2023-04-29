@@ -4,7 +4,6 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.*
 import dev.muyiwa.common.data.api.utils.*
 import dev.muyiwa.common.domain.model.*
-import dev.muyiwa.common.domain.model.detail.*
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.presentation.*
 import dev.muyiwa.common.utils.*
@@ -51,9 +50,13 @@ class MovieDetailViewModel @Inject constructor(
 	}
 
 	private fun getDetailsOfMovie(id: Int) {
+		Logger.d("Getting movie detail...")
 		viewModelScope.launch(exceptionHandler) {
-			val detail = getMovieDetail(id)
-			onDetails(detail)
+			getMovieDetail(id)
+				.catch { onFailed(it) }
+				.collect { onDetails(it) }
+//			val detail = getMovieDetail(id)
+//			onDetails(detail)
 		}
 	}
 
@@ -93,12 +96,12 @@ class MovieDetailViewModel @Inject constructor(
 //	}
 
 	private fun onFailed(failure: Throwable) {
-		when (failure) {
-			is NetworkUnavailableException -> {
+//		when (failure) {
+//			is NetworkUnavailableException -> {
 				_state.update { oldState ->
 					oldState.copy(isLoading = false, failure = Event(failure))
 				}
-			}
-		}
+//			}
+//		}
 	}
 }

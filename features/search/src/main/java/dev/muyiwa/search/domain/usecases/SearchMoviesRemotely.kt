@@ -1,5 +1,6 @@
 package dev.muyiwa.search.domain.usecases
 
+import dev.muyiwa.common.domain.model.*
 import dev.muyiwa.common.domain.repositories.*
 import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.utils.*
@@ -13,11 +14,10 @@ class SearchMoviesRemotely @Inject constructor(
 	suspend operator fun invoke(
 		pageToLoad: Int,
 		query: String
-	): dev.muyiwa.common.domain.model.Pagination {
+	): Pagination {
 		return withContext(dispatchersProvider.io()) {
 			val (moviesWithGenres, pagination) = repository
 				.searchMoviesRemotely(query, pageToLoad)
-//			Logger.i("Search Query is $query\n moviesWithGenres = $moviesWithGenres")
 			if (moviesWithGenres.isEmpty()) {
 				throw NoMoreMoviesException("Unable to get moviesWithGenres like $query")
 			}

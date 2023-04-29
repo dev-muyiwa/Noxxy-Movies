@@ -11,7 +11,7 @@ class RequestMoreCategorisedMovies @Inject constructor(
 	private val dispatchersProvider: DispatchersProvider
 ) {
 	suspend operator fun invoke(
-		pageToLoad: Int,
+		pageToLoad: Int = 1,
 		category: Category
 	): dev.muyiwa.common.domain.model.Pagination {
 		return withContext(dispatchersProvider.io()) {

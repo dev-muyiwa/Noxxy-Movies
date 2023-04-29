@@ -31,35 +31,40 @@ class NoxxyAppRepository @Inject constructor(
 
 	override fun getAllCategoriesOfMovies(count: Int): Flow<List<Pair<Category, List<MovieWithGenres>>>> {
 		return flow {
-			val popularMovies = CoroutineScope(dispatchersProvider.io()).async {
-				retry {
-					Category.POPULAR to
-							cache.getMoviesWithGenreBy(Category.POPULAR.toCacheModel(), count)
-								.map { it.toDomainModel() }
-				}
-			}
-			val nowPlayingMovies = CoroutineScope(dispatchersProvider.io()).async {
-				retry {
-					Category.NOW_PLAYING to
-							cache.getMoviesWithGenreBy(Category.NOW_PLAYING.toCacheModel(), count)
-								.map { it.toDomainModel() }
-				}
-			}
-			val topRatedMovies = CoroutineScope(dispatchersProvider.io()).async {
-				retry {
-					Category.TOP_RATED to
-							cache.getMoviesWithGenreBy(Category.TOP_RATED.toCacheModel(), count)
-								.map { it.toDomainModel() }
-				}
-			}
-			val upcomingMovies = CoroutineScope(dispatchersProvider.io()).async {
-				retry {
-					Category.UPCOMING to
-							cache.getMoviesWithGenreBy(Category.UPCOMING.toCacheModel(), count)
-								.map { it.toDomainModel() }
-				}
-			}
-			val result = listOf(popularMovies.await(), nowPlayingMovies.await(), topRatedMovies.await(), upcomingMovies.await())
+			val popularMovies =
+//				CoroutineScope(dispatchersProvider.io()).async {
+//				retry {
+				Category.POPULAR to
+						cache.getMoviesWithGenreBy(Category.POPULAR.toCacheModel(), count)
+							.map { it.toDomainModel() }
+//				}
+//			}
+			val nowPlayingMovies =
+//				CoroutineScope(dispatchersProvider.io()).async {
+//				retry {
+				Category.NOW_PLAYING to
+						cache.getMoviesWithGenreBy(Category.NOW_PLAYING.toCacheModel(), count)
+							.map { it.toDomainModel() }
+//				}
+//			}
+			val topRatedMovies =
+//				CoroutineScope(dispatchersProvider.io()).async {
+//				retry {
+				Category.TOP_RATED to
+						cache.getMoviesWithGenreBy(Category.TOP_RATED.toCacheModel(), count)
+							.map { it.toDomainModel() }
+//				}
+//			}
+			val upcomingMovies =
+//				CoroutineScope(dispatchersProvider.io()).async {
+//				retry {
+				Category.UPCOMING to
+						cache.getMoviesWithGenreBy(Category.UPCOMING.toCacheModel(), count)
+							.map { it.toDomainModel() }
+//				}
+//			}
+//			val result = listOf(popularMovies.await(), nowPlayingMovies.await(), topRatedMovies.await(), upcomingMovies.await())
+			val result = listOf(popularMovies, nowPlayingMovies, topRatedMovies, upcomingMovies)
 //			Logger.i("Cache Movies => $result")
 			emit(result)
 			try {
@@ -96,57 +101,42 @@ class NoxxyAppRepository @Inject constructor(
 					exception.message() ?: "Code ${exception.code()}"
 				)
 			}
-			val updatedPopularMovies = CoroutineScope(dispatchersProvider.io()).async {
-				retry {
-					Category.POPULAR to
-							cache.getMoviesWithGenreBy(Category.POPULAR.toCacheModel(), count)
-								.map { it.toDomainModel() }
-				}
-			}
-			val updatedNowPlayingMovies = CoroutineScope(dispatchersProvider.io()).async {
-				retry {
-					Category.NOW_PLAYING to
-							cache.getMoviesWithGenreBy(Category.NOW_PLAYING.toCacheModel(), count)
-								.map { it.toDomainModel() }
-				}
-			}
-			val updatedTopRatedMovies = CoroutineScope(dispatchersProvider.io()).async {
-				retry {
-					Category.TOP_RATED to
-							cache.getMoviesWithGenreBy(Category.TOP_RATED.toCacheModel(), count)
-								.map { it.toDomainModel() }
-				}
-			}
-			val updatedUpcomingMovies = CoroutineScope(dispatchersProvider.io()).async {
-				retry {
-					Category.UPCOMING to
-							cache.getMoviesWithGenreBy(Category.UPCOMING.toCacheModel(), count)
-								.map { it.toDomainModel() }
-				}
-			}
+			val updatedPopularMovies =
+//				CoroutineScope(dispatchersProvider.io()).async {
+//				retry {
+				Category.POPULAR to
+						cache.getMoviesWithGenreBy(Category.POPULAR.toCacheModel(), count)
+							.map { it.toDomainModel() }
+//				}
+//			}
+			val updatedNowPlayingMovies =
+//				CoroutineScope(dispatchersProvider.io()).async {
+//				retry {
+				Category.NOW_PLAYING to
+						cache.getMoviesWithGenreBy(Category.NOW_PLAYING.toCacheModel(), count)
+							.map { it.toDomainModel() }
+//				}
+//			}
+			val updatedTopRatedMovies =
+//				CoroutineScope(dispatchersProvider.io()).async {
+//				retry {
+				Category.TOP_RATED to
+						cache.getMoviesWithGenreBy(Category.TOP_RATED.toCacheModel(), count)
+							.map { it.toDomainModel() }
+//				}
+//			}
+			val updatedUpcomingMovies =
+//				CoroutineScope(dispatchersProvider.io()).async {
+//				retry {
+				Category.UPCOMING to
+						cache.getMoviesWithGenreBy(Category.UPCOMING.toCacheModel(), count)
+							.map { it.toDomainModel() }
+//				}
+//			}
 			val updatedResult =
-				listOf(updatedPopularMovies.await(), updatedNowPlayingMovies.await(), updatedTopRatedMovies.await(), updatedUpcomingMovies.await())
+				listOf(updatedPopularMovies, updatedNowPlayingMovies, updatedTopRatedMovies, updatedUpcomingMovies)
 			Logger.i("Cache Movies => $result")
 			emit(updatedResult)
-		}
-	}
-
-	override suspend fun getAllCategoriesOfMoviesRemotely(pageToLoad: Int, count: Int): List<Pair<Category, MoviePagination>> {
-		return try {
-			withContext(dispatchersProvider.io()) {
-				val result = async {
-					val popularPair = Category.POPULAR to requestForMoreCategorisedMovies(pageToLoad, Category.POPULAR)
-					val nowPlayingPair = Category.NOW_PLAYING to requestForMoreCategorisedMovies(pageToLoad, Category.NOW_PLAYING)
-					val topRatedPair = Category.TOP_RATED to requestForMoreCategorisedMovies(pageToLoad, Category.TOP_RATED)
-					val upcomingPair = Category.UPCOMING to requestForMoreCategorisedMovies(pageToLoad, Category.UPCOMING)
-					listOf(popularPair, nowPlayingPair, topRatedPair, upcomingPair)
-				}
-				return@withContext result.await()
-			}
-		} catch (exception: HttpException) {
-			throw NetworkException(
-				exception.message() ?: "Code ${exception.code()}"
-			)
 		}
 	}
 
@@ -187,31 +177,56 @@ class NoxxyAppRepository @Inject constructor(
 		)
 	}
 
-	override suspend fun getMovieDetail(movieId: Int): MovieWithFullDetail {
-		try {
+	override fun getMovieDetail(movieId: Int): Flow<MovieWithFullDetail> {
+		return flow {
 			val movie = cache.getMovieWithCompleteDetails(movieId)
-			if (movie.detail != null && movie.genres != null && movie.casts != null && movie.reviews != null) {
-				return movie.toDomainModel()
-			} else {
-				val result = withContext(dispatchersProvider.io()) {
-					val apiDetail = async { api.fetchMovieDetailsById(movieId.toLong()) }
-					val apiCasts = async { api.fetchCastsByMovieId(movieId.toLong()) }
-					val apiReviews = async { api.getReviews(movieId.toLong(), preferences.languageTag, 1) }
-					Triple(apiDetail.await(), apiCasts.await(), apiReviews.await())
-				}
-				cache.storeDetails(
-					movie = movie.movie,
-					detail = result.first.toDomainModel().toCacheModel(movieId),
-					genres = movie.genres.orEmpty(),
-					casts = result.second.toDomainModel().map { it.toCacheModel(movieId) },
-					reviews = result.third.toDomainModel().map { it.toCacheModel(movieId) }
-				)
-				return cache.getMovieWithCompleteDetails(movieId).toDomainModel()
+			if(movie.detail != null) {
+				emit(movie.toDomainModel())
 			}
-		} catch (exception: HttpException) {
-			throw NetworkException(
-				exception.message() ?: "Code ${exception.code()}"
-			)
+			try {
+				retry {
+					val apiDetails = retry { CoroutineScope(dispatchersProvider.io()).async {
+							api.fetchMovieDetailsById(movieId.toLong())
+						} }
+					val apiCasts = retry { CoroutineScope(dispatchersProvider.io()).async {
+						api.fetchCastsByMovieId(movieId.toLong())
+					} }
+					val apiReviews = retry { CoroutineScope(dispatchersProvider.io()).async {
+						api.getReviews(movieId.toLong(), preferences.languageTag, 1)
+					} }
+
+//					val result = withContext(dispatchersProvider.io()) {
+//						val apiDetail = async { api.fetchMovieDetailsById(movieId.toLong()) }
+//						val apiCasts = async { api.fetchCastsByMovieId(movieId.toLong()) }
+//						val apiReviews = async { api.getReviews(movieId.toLong(), preferences.languageTag, 1) }
+//						Triple(apiDetail.await(), apiCasts.await(), apiReviews.await())
+//					}
+//					Logger.d("Movie ID => $movie, Movie => $movie")
+//					cache.storeDetails(
+//						movie = movie.movie,
+//						detail = result.first.toDomainModel().toCacheModel(movieId),
+//						genres = movie.genres.orEmpty(),
+//						casts = result.second.toDomainModel().map { it.toCacheModel(movieId) },
+//						reviews = result.third.toDomainModel().map { it.toCacheModel(movieId) }
+//					)
+
+					cache.storeDetails(
+						movie = movie.movie,
+						detail = apiDetails.await().toDomainModel().toCacheModel(movieId),
+						genres = movie.genres.orEmpty(),
+						casts = apiCasts.await().toDomainModel().map { it.toCacheModel(movieId) },
+						reviews = apiReviews.await().toDomainModel().map { it.toCacheModel(movieId) }
+					)
+
+				}
+			} catch (exception: HttpException) {
+				throw NetworkException(
+					exception.message() ?: "Code ${exception.code()}"
+				)
+			}
+			val updatedMovie = cache.getMovieWithCompleteDetails(movieId)
+			Logger.d(" Updated Movie ID => ${movie.movie.movieId}, Movie => $movie")
+			emit(updatedMovie.toDomainModel())
 		}
 	}
 
@@ -243,6 +258,10 @@ class NoxxyAppRepository @Inject constructor(
 				e.message() ?: "Code ${e.code()}"
 			)
 		}
+	}
+
+	override suspend fun toggleBookmark(movieId: Int) {
+		TODO("Not yet implemented")
 	}
 
 	private suspend fun <T> retry(

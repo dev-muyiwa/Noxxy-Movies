@@ -3,6 +3,7 @@ package dev.muyiwa.home.presentation.all
 import android.os.*
 import android.view.*
 import android.widget.*
+import androidx.core.view.*
 import androidx.fragment.app.*
 import androidx.lifecycle.*
 import androidx.navigation.fragment.*
@@ -12,6 +13,7 @@ import dev.muyiwa.common.domain.utils.*
 import dev.muyiwa.common.presentation.*
 import dev.muyiwa.common.utils.*
 import dev.muyiwa.home.databinding.*
+import dev.muyiwa.logging.*
 import kotlinx.coroutines.*
 
 @AndroidEntryPoint
@@ -40,6 +42,8 @@ class HomeFragment : Fragment(), ItemClickListener {
 		}
 		lifecycleScope.launch {
 			viewModel.state.collect {
+				binding?.searchBarHome?.isVisible = it.isLoading
+				binding?.homeRv?.isVisible = it.isLoading.not()
 				allMoviesAdapter.setData(it.allMovies)
 				handleFailure(it.failure)
 			}

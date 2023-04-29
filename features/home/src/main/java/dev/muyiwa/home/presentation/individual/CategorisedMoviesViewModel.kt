@@ -49,7 +49,6 @@ class CategorisedMoviesViewModel @Inject constructor(
 		viewModelScope.launch(exceptionHandler) {
 			getCategorisedMovies(category)
 				.onEach { if (hasNoMoviesStoredButCanLoadMore(it)) loadNextPageOfMovies() }
-//				.map { movies -> movies.map { it.toFullUiModel() } }
 				.filter { it.isNotEmpty() }
 				.flowOn(Dispatchers.Default)
 				.catch { onFailed(it) }

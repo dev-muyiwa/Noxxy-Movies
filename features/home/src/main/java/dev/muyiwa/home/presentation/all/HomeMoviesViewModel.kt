@@ -62,12 +62,11 @@ class HomeMoviesViewModel @Inject constructor(
 	}
 
 	private fun loadNextPageOfMovies(category: Category) {
-		isLoadingMoreMovies = true
+//		isLoadingMoreMovies = true
 		viewModelScope.launch(exceptionHandler) {
 			Logger.d("Requesting more movies.")
 			val pagination = requestMoreCategorisedMovies(category = category)
-//			onPaginationObtained(pagination)
-			isLoadingMoreMovies = false
+//			isLoadingMoreMovies = false
 		}
 	}
 
